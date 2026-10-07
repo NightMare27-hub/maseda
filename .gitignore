@@ -1,0 +1,16 @@
+# secrets
+.env
+*.key
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# data and runs
+logs/*.jsonl
+chroma_db/
+work/
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
