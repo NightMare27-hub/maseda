@@ -1,0 +1,320 @@
+[
+  {
+    "id": "task_01",
+    "name": "calculator_divide",
+    "repo": "evaluation/toy_repo",
+    "category": "bugfix",
+    "instruction": "Implement divide(a, b) in calculator.py. It must return a / b and raise ValueError with a clear message when b is zero.",
+    "expected_files": [
+      "calculator.py"
+    ],
+    "setup_edits": {},
+    "golden_solution": {
+      "calculator.py": "def add(a, b):\n    return a + b\n\n\ndef subtract(a, b):\n    return a - b\n\n\ndef multiply(a, b):\n    return a * b\n\n\ndef divide(a, b):\n    if b == 0:\n        raise ValueError(\"Cannot divide by zero\")\n    return a / b\n\n\ndef power(base, exp):\n    return base ** exp\n"
+    }
+  },
+  {
+    "id": "task_02",
+    "name": "math_power",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement power(base, exp) in math_utils.py. It must compute base raised to exp (base ** exp).",
+    "expected_files": [
+      "math_utils.py"
+    ],
+    "setup_edits": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\n\n\n"
+    },
+    "golden_solution": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    }
+  },
+  {
+    "id": "task_03",
+    "name": "math_factorial",
+    "repo": "evaluation/bench_repo",
+    "category": "bugfix",
+    "instruction": "Ensure factorial(n) in math_utils.py correctly handles n == 0 by returning 1, returns n! for positive integers, and raises ValueError for negative inputs.",
+    "expected_files": [
+      "math_utils.py"
+    ],
+    "setup_edits": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    # buggy: no negative check\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    },
+    "golden_solution": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    }
+  },
+  {
+    "id": "task_04",
+    "name": "math_is_prime",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement is_prime(n) in math_utils.py returning True if n is a prime number, and False for n <= 1 or composite numbers.",
+    "expected_files": [
+      "math_utils.py"
+    ],
+    "setup_edits": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    return False\n    _x = \"\"\"\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\"\"\"\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    },
+    "golden_solution": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    }
+  },
+  {
+    "id": "task_05",
+    "name": "math_fibonacci",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement fibonacci(n) in math_utils.py returning the n-th Fibonacci number with 0-indexing (fib(0)=0, fib(1)=1), raising ValueError for negative numbers.",
+    "expected_files": [
+      "math_utils.py"
+    ],
+    "setup_edits": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    return 0\n    _x = \"\"\"\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\"\"\"\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    },
+    "golden_solution": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    }
+  },
+  {
+    "id": "task_06",
+    "name": "math_clamp",
+    "repo": "evaluation/bench_repo",
+    "category": "edge_case",
+    "instruction": "Implement clamp(val, min_val, max_val) in math_utils.py returning min_val if val < min_val, max_val if val > max_val, and val otherwise. Raise ValueError if min_val > max_val.",
+    "expected_files": [
+      "math_utils.py"
+    ],
+    "setup_edits": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    return val\n    _x = \"\"\"\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n\"\"\"\n"
+    },
+    "golden_solution": {
+      "math_utils.py": "def add(a, b):\n    return a + b\n\n\ndef factorial(n):\n    if n < 0:\n        raise ValueError(\"Factorial not defined for negative numbers\")\n    if n == 0:\n        return 1\n    res = 1\n    for i in range(1, n + 1):\n        res *= i\n    return res\n\n\ndef is_prime(n):\n    if n <= 1:\n        return False\n    if n <= 3:\n        return True\n    if n % 2 == 0 or n % 3 == 0:\n        return False\n    i = 5\n    while i * i <= n:\n        if n % i == 0 or n % (i + 2) == 0:\n            return False\n        i += 6\n    return True\n\n\ndef fibonacci(n):\n    if n < 0:\n        raise ValueError(\"Fibonacci not defined for negative numbers\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b\n\n\ndef clamp(val, min_val, max_val):\n    if min_val > max_val:\n        raise ValueError(\"min_val cannot exceed max_val\")\n    return max(min_val, min(val, max_val))\n\n\ndef power(base, exp):\n    return base ** exp\n\n"
+    }
+  },
+  {
+    "id": "task_07",
+    "name": "text_truncate",
+    "repo": "evaluation/bench_repo",
+    "category": "bugfix",
+    "instruction": "Fix truncate(text, max_len, suffix='...') in text_utils.py so it returns the original text unmodified if len(text) <= max_len.",
+    "expected_files": [
+      "text_utils.py"
+    ],
+    "setup_edits": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    # bug: missing length check\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    },
+    "golden_solution": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    }
+  },
+  {
+    "id": "task_08",
+    "name": "text_slugify",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement slugify(text) in text_utils.py to convert text to lowercase, remove punctuation, replace whitespace with single hyphens, and strip leading/trailing hyphens.",
+    "expected_files": [
+      "text_utils.py"
+    ],
+    "setup_edits": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    return \"\"\n    _x = \"\"\"\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\"\"\"\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    },
+    "golden_solution": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    }
+  },
+  {
+    "id": "task_09",
+    "name": "text_count_words",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement count_words(text) in text_utils.py returning a dictionary mapping lowercase words to their occurrences, ignoring punctuation.",
+    "expected_files": [
+      "text_utils.py"
+    ],
+    "setup_edits": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    return {}\n    _x = \"\"\"\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\"\"\"\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    },
+    "golden_solution": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    }
+  },
+  {
+    "id": "task_10",
+    "name": "text_capitalize_words",
+    "repo": "evaluation/bench_repo",
+    "category": "edge_case",
+    "instruction": "Implement capitalize_words(text) in text_utils.py capitalizing each word while preserving original space characters between words.",
+    "expected_files": [
+      "text_utils.py"
+    ],
+    "setup_edits": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return text.title()\n\n"
+    },
+    "golden_solution": {
+      "text_utils.py": "import re\n\n\ndef truncate(text: str, max_len: int, suffix: str = \"...\") -> str:\n    if len(text) <= max_len:\n        return text\n    if max_len < len(suffix):\n        return text[:max_len]\n    return text[: max_len - len(suffix)] + suffix\n\n\ndef slugify(text: str) -> str:\n    text = text.lower().strip()\n    text = re.sub(r\"[^\\w\\s-]\", \"\", text)\n    text = re.sub(r\"[\\s_-]+\", \"-\", text)\n    return text.strip(\"-\")\n\n\ndef count_words(text: str) -> dict:\n    words = re.findall(r\"\\b\\w+\\b\", text.lower())\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts\n\n\ndef capitalize_words(text: str) -> str:\n    return \" \".join(word.capitalize() for word in text.split(\" \"))\n\n"
+    }
+  },
+  {
+    "id": "task_11",
+    "name": "collection_chunk_list",
+    "repo": "evaluation/bench_repo",
+    "category": "bugfix",
+    "instruction": "Implement chunk_list(lst, size) in collection_utils.py splitting lst into sublists of length size. Raise ValueError if size <= 0.",
+    "expected_files": [
+      "collection_utils.py"
+    ],
+    "setup_edits": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    # bug: missing non-positive size check\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    },
+    "golden_solution": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    }
+  },
+  {
+    "id": "task_12",
+    "name": "collection_flatten",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement flatten(nested_list) in collection_utils.py recursively flattening arbitrarily nested lists into a flat list.",
+    "expected_files": [
+      "collection_utils.py"
+    ],
+    "setup_edits": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    return nested_list\n    _x = \"\"\"\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\"\"\"\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    },
+    "golden_solution": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    }
+  },
+  {
+    "id": "task_13",
+    "name": "collection_deduplicate",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement deduplicate(items) in collection_utils.py returning a list of elements with duplicates removed while preserving insertion order.",
+    "expected_files": [
+      "collection_utils.py"
+    ],
+    "setup_edits": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    return list(set(items))\n    _x = \"\"\"\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\"\"\"\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    },
+    "golden_solution": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    }
+  },
+  {
+    "id": "task_14",
+    "name": "collection_find_first",
+    "repo": "evaluation/bench_repo",
+    "category": "edge_case",
+    "instruction": "Implement find_first(predicate, iterable, default=None) in collection_utils.py returning the first item where predicate(item) is True, or default if none match.",
+    "expected_files": [
+      "collection_utils.py"
+    ],
+    "setup_edits": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    return None\n    _x = \"\"\"\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n\"\"\"\n"
+    },
+    "golden_solution": {
+      "collection_utils.py": "def chunk_list(lst: list, size: int) -> list:\n    if size <= 0:\n        raise ValueError(\"Chunk size must be positive\")\n    return [lst[i : i + size] for i in range(0, len(lst), size)]\n\n\ndef flatten(nested_list: list) -> list:\n    out = []\n    for item in nested_list:\n        if isinstance(item, list):\n            out.extend(flatten(item))\n        else:\n            out.append(item)\n    return out\n\n\ndef deduplicate(items: list) -> list:\n    seen = set()\n    out = []\n    for x in items:\n        if x not in seen:\n            seen.add(x)\n            out.append(x)\n    return out\n\n\ndef find_first(predicate, iterable, default=None):\n    for item in iterable:\n        if predicate(item):\n            return item\n    return default\n\n"
+    }
+  },
+  {
+    "id": "task_15",
+    "name": "geometry_distance",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement distance(p1, p2) in geometry.py calculating the Euclidean distance between two 2D points represented as (x, y) tuples.",
+    "expected_files": [
+      "geometry.py"
+    ],
+    "setup_edits": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return 0.0\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    },
+    "golden_solution": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    }
+  },
+  {
+    "id": "task_16",
+    "name": "geometry_rectangle",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement Rectangle(width, height) class in geometry.py with area() and perimeter() methods, raising ValueError if width or height is negative.",
+    "expected_files": [
+      "geometry.py"
+    ],
+    "setup_edits": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass DummyRect:\n    _x = \"\"\"\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 0\"\"\"\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    },
+    "golden_solution": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    }
+  },
+  {
+    "id": "task_17",
+    "name": "geometry_is_inside_box",
+    "repo": "evaluation/bench_repo",
+    "category": "edge_case",
+    "instruction": "Implement is_inside_box(point, box) in geometry.py checking whether point (x, y) is inside or on the boundary of box (x1, y1, x2, y2).",
+    "expected_files": [
+      "geometry.py"
+    ],
+    "setup_edits": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return False\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    },
+    "golden_solution": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    }
+  },
+  {
+    "id": "task_18",
+    "name": "validator_validate_email",
+    "repo": "evaluation/bench_repo",
+    "category": "feature",
+    "instruction": "Implement validate_email(email) in validator.py checking whether email has a valid username, @ symbol, and domain extension.",
+    "expected_files": [
+      "validator.py"
+    ],
+    "setup_edits": {
+      "validator.py": "import re\nfrom text_utils import slugify\n\n\ndef validate_email(email: str) -> bool:\n    pattern = r\"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$\"\n    return False\n\n\ndef validate_range(value: float, low: float, high: float) -> bool:\n    if low > high:\n        raise ValueError(\"low cannot exceed high\")\n    if not (low <= value <= high):\n        raise ValueError(f\"Value {value} is out of range [{low}, {high}]\")\n    return True\n\n\ndef validate_slug(text: str) -> bool:\n    return slugify(text) == text and len(text) > 0\n\n"
+    },
+    "golden_solution": {
+      "validator.py": "import re\nfrom text_utils import slugify\n\n\ndef validate_email(email: str) -> bool:\n    pattern = r\"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$\"\n    return bool(re.match(pattern, email.strip()))\n\n\ndef validate_range(value: float, low: float, high: float) -> bool:\n    if low > high:\n        raise ValueError(\"low cannot exceed high\")\n    if not (low <= value <= high):\n        raise ValueError(f\"Value {value} is out of range [{low}, {high}]\")\n    return True\n\n\ndef validate_slug(text: str) -> bool:\n    return slugify(text) == text and len(text) > 0\n\n"
+    }
+  },
+  {
+    "id": "task_19",
+    "name": "geometry_scale_rectangle_cross_module",
+    "repo": "evaluation/bench_repo",
+    "category": "multi_file",
+    "instruction": "Implement scale_rectangle(rect, factor) in geometry.py importing and using clamp from math_utils.py to ensure the scaling factor is clamped between 0.1 and 10.0.",
+    "expected_files": [
+      "geometry.py"
+    ],
+    "setup_edits": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect, factor):\n    return rect\n\n"
+    },
+    "golden_solution": {
+      "geometry.py": "import math\nfrom math_utils import clamp\n\n\ndef distance(p1: tuple, p2: tuple) -> float:\n    return math.hypot(p1[0] - p2[0], p1[1] - p2[1])\n\n\nclass Rectangle:\n    def __init__(self, width: float, height: float):\n        if width < 0 or height < 0:\n            raise ValueError(\"Dimensions must be non-negative\")\n        self.width = width\n        self.height = height\n\n    def area(self) -> float:\n        return self.width * self.height\n\n    def perimeter(self) -> float:\n        return 2 * (self.width + self.height)\n\n\ndef is_inside_box(point: tuple, box: tuple) -> bool:\n    x, y = point\n    x1, y1, x2, y2 = box\n    return x1 <= x <= x2 and y1 <= y <= y2\n\n\ndef scale_rectangle(rect: Rectangle, factor: float) -> Rectangle:\n    safe_factor = clamp(factor, 0.1, 10.0)\n    return Rectangle(rect.width * safe_factor, rect.height * safe_factor)\n\n"
+    }
+  },
+  {
+    "id": "task_20",
+    "name": "validator_validate_slug_cross_module",
+    "repo": "evaluation/bench_repo",
+    "category": "multi_file",
+    "instruction": "Implement validate_slug(text) in validator.py importing and using slugify from text_utils.py to verify if text is non-empty and matches its slugified version.",
+    "expected_files": [
+      "validator.py"
+    ],
+    "setup_edits": {
+      "validator.py": "import re\nfrom text_utils import slugify\n\n\ndef validate_email(email: str) -> bool:\n    pattern = r\"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$\"\n    return bool(re.match(pattern, email.strip()))\n\n\ndef validate_range(value: float, low: float, high: float) -> bool:\n    if low > high:\n        raise ValueError(\"low cannot exceed high\")\n    if not (low <= value <= high):\n        raise ValueError(f\"Value {value} is out of range [{low}, {high}]\")\n    return True\n\n\ndef validate_slug(text: str) -> bool:\n    return False\n\n"
+    },
+    "golden_solution": {
+      "validator.py": "import re\nfrom text_utils import slugify\n\n\ndef validate_email(email: str) -> bool:\n    pattern = r\"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$\"\n    return bool(re.match(pattern, email.strip()))\n\n\ndef validate_range(value: float, low: float, high: float) -> bool:\n    if low > high:\n        raise ValueError(\"low cannot exceed high\")\n    if not (low <= value <= high):\n        raise ValueError(f\"Value {value} is out of range [{low}, {high}]\")\n    return True\n\n\ndef validate_slug(text: str) -> bool:\n    return slugify(text) == text and len(text) > 0\n\n"
+    }
+  }
+]
