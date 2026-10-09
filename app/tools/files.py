@@ -69,3 +69,13 @@ def validate_python_syntax(edits: dict) -> tuple[bool, str]:
                     err += f"\n  {line_snippet}"
                 return False, err
     return True, ""
+
+
+def load_guidelines() -> str:
+    """Load core engineering guidelines from docs/agent_guidelines.md."""
+    base = pathlib.Path(__file__).resolve().parent.parent.parent
+    path = base / "docs" / "agent_guidelines.md"
+    if path.is_file():
+        return path.read_text(encoding="utf-8")
+    return ""
+

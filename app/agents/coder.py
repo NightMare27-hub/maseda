@@ -1,6 +1,6 @@
 from app.llm import ask_json
 from app.logger import log
-from app.tools.files import is_test_file, list_py_files, read_file, safe_path
+from app.tools.files import is_test_file, list_py_files, load_guidelines, read_file, safe_path
 
 SYSTEM = """You are the Coder in a multi-agent software team.
 Implement the plan by writing the FULL new content of every file you change or create.
@@ -84,7 +84,9 @@ def coder(state):
     rag_ctx = _rag_context(state)
     files_ctx = _context(state)
     context_str = f"{rag_ctx}\n\n{files_ctx}".strip() if rag_ctx else files_ctx
-    user = (f"TASK:\n{state['task']}\n\nPLAN:\n{state['plan']}\n\nFILES:\n{context_str}")
+    guidelines = load_guidelines()
+    guidelines_section = f"\n\nENGINEERING STANDARDS (docs/agent_guidelines.md):\n{guidelines}" if guidelines else ""
+    user = (f"TASK:\n{state['task']}\n\nPLAN:\n{state['plan']}\n\nFILES:\n{context_str}{guidelines_section}")
     if prev:
         shown = "\n\n".join(f"=== {p} ===\n{c}" for p, c in prev.items())
         user += f"\n\nYOUR PREVIOUS EDITS:\n{shown}"

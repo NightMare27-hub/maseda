@@ -13,6 +13,8 @@
 | 2026-10-09 | Antigravity | Systemic Sandbox Diagnostic Hints & Plain-English User Explanations | Added sandbox hints for timeouts, blocking input (`EOFError`), offline network, and headless GUI crashes in `sandbox.py`; added plain-English `user_explanation` generation in `reviewer.py` for non-coders and mentors; displayed explanation prominently in `main.py`; added 2 unit tests (34 passing offline). |
 | 2026-10-10 | Antigravity | Dynamic Gemini Model Cascade & Real-Time Graph Progress Streaming | Implemented Google API dynamic model discovery and capability-based fallback cascade in `app/llm.py`; added upfront `approach` field in `planner.py`; added real-time LangGraph node streaming with console progress in `graph.py`; added 2 unit tests (36 passing offline). |
 | 2026-10-10 | Antigravity | Dual-Contract Architecture & Dual-Gate Review Protocol | Added `logic_contract` and `operational_contract` to `planner.py` and `State`; instructed `coder.py` to preserve runnable entrypoints; implemented Gate 1 (automated verification) and Gate 2 (human usability audit) in `reviewer.py`; added 1 unit test (37 passing offline). |
+| 2026-10-10 | Antigravity | Externalized Agent Guidelines & Markdown Policy Ingestion | Created `docs/agent_guidelines.md` codifying Dual-Contract, Zero-Friction Cross-Platform (Windows/msvcrt), and Anti-Stubbing policies; added `load_guidelines()` in `app/tools/files.py` and dynamic injection into Coder/Reviewer prompts; all 37 tests passing offline. |
+
 
 
 

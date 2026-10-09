@@ -1,7 +1,7 @@
 from app.llm import ask_json
 from app.logger import log
 from app.state import MAX_ITERS
-from app.tools.files import make_diff
+from app.tools.files import load_guidelines, make_diff
 
 SYSTEM = """You are the Reviewer in a multi-agent software team.
 Your job is to inspect the test execution results and proposed code diffs for a given coding task.
@@ -45,12 +45,16 @@ def reviewer(state):
     tests_passed = state.get("tests_passed", False)
     test_output = state.get("test_output", "(no test output)")
 
+    guidelines = load_guidelines()
+    guidelines_section = f"\n\nENGINEERING STANDARDS (docs/agent_guidelines.md):\n{guidelines}" if guidelines else ""
+
     user = (
         f"TASK:\n{task}\n\n"
         f"PLAN:\n{plan}\n\n"
         f"PROPOSED DIFF:\n{diff or '(no changes)'}\n\n"
         f"TESTS STATUS: {'PASSED' if tests_passed else 'FAILED'}\n\n"
         f"TEST OUTPUT:\n{test_output}"
+        f"{guidelines_section}"
     )
 
     data, meta = ask_json(SYSTEM, user)
