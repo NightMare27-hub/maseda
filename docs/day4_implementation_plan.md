@@ -108,3 +108,4 @@ class State(TypedDict, total=False):
 - [ ] `evaluation/run_eval.py` accepts `--rag` and logs retrieval usage.
 - [ ] All unit tests pass offline with `pytest -q`.
 - [ ] Changes committed cleanly to `feature/day4-rag-integration`.
+

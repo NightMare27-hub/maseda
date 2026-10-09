@@ -107,3 +107,71 @@ def test_run_task_with_rag_end_to_end(tmp_path, monkeypatch):
     res = run_task("make hello return world", str(tmp_path), rag=True, rag_mode="hybrid")
     assert res["status"] == "success"
     assert res["rag_enabled"] is True
+
+
+def test_planner_auto_bootstraps_test_file_when_repo_has_no_tests(tmp_path):
+    # Empty repo with no test files
+    state = {
+        "task": "build snake game engine",
+        "repo_path": str(tmp_path),
+        "run_id": "test_empty_repo",
+    }
+    with patch("app.agents.planner.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {"files": ["snake.py", "test_snake.py"], "steps": ["create snake.py", "write test_snake.py"]},
+            {"tokens": 40, "cost": 0.0001, "seconds": 0.05},
+        )
+        res = planner(state)
+
+    user_prompt = mock_ask.call_args[0][1]
+    assert "NOTE: This repository currently has NO test files!" in user_prompt
+    assert "test_snake.py" in res["plan"]["files"]
+
+
+def test_reviewer_diagnoses_exit_code_5_and_module_not_found(tmp_path):
+    from app.agents.reviewer import reviewer
+
+    state = {
+        "task": "build weather tool",
+        "plan": {"files": ["weather.py"]},
+        "edits": {"weather.py": "import requests"},
+        "repo_path": str(tmp_path),
+        "run_id": "test_rev",
+        "tests_passed": False,
+        "test_output": "ModuleNotFoundError: No module named 'requests'\nNo tests were collected or run (exit code 5).",
+    }
+    with patch("app.agents.reviewer.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approved": False,
+                "summary": "Missing requests and tests",
+                "feedback": "Use urllib instead and add pytest functions",
+                "suggested_fixes": ["use urllib.request", "create test_weather.py"],
+            },
+            {"tokens": 60, "cost": 0.0002, "seconds": 0.1},
+        )
+        res = reviewer(state)
+
+    assert res["review_approved"] is False
+    system_prompt = mock_ask.call_args[0][0]
+    assert "ModuleNotFoundError" in system_prompt
+    assert "exit code 5" in system_prompt
+
+
+def test_coder_context_large_file_outline(tmp_path):
+    from app.agents.coder import _context
+
+    p = tmp_path / "big_module.py"
+    funcs = "\n\n".join(f"def func_{i}():\n    return {i}" for i in range(600))
+    p.write_text(funcs, encoding="utf-8")
+    state = {
+        "repo_path": str(tmp_path),
+        "plan": {"files": ["big_module.py"]},
+    }
+    ctx = _context(state)
+    assert "[FILE OUTLINE" in ctx
+    assert "def func_0(...)" in ctx
+    assert "[FILE PREVIEW" in ctx
+
+
+
