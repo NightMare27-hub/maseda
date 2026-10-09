@@ -36,11 +36,22 @@ def _chunk(file: str, symbol: str, kind: str, parent: str, start: int, end: int,
     }
 
 
+def _node_start(node: ast.AST) -> int:
+    decs = getattr(node, "decorator_list", [])
+    if decs:
+        return min(d.lineno for d in decs)
+    return getattr(node, "lineno", 1)
+
+
 def chunk_python_file(path: str | pathlib.Path, repo_root: str | pathlib.Path | None = None) -> list[dict]:
     p = pathlib.Path(path)
     root = pathlib.Path(repo_root) if repo_root else p.parent
     rel = p.resolve().relative_to(root.resolve()).as_posix()
-    source = p.read_text(encoding="utf-8")
+    try:
+        source = p.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return []
+
     try:
         tree = ast.parse(source)
     except SyntaxError:
@@ -68,42 +79,48 @@ def chunk_python_file(path: str | pathlib.Path, repo_root: str | pathlib.Path | 
 
     for node in tree.body:
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            start = _node_start(node)
+            end = node.end_lineno or node.lineno
             chunks.append(
                 _chunk(
                     rel,
                     node.name,
                     "function",
                     "",
-                    node.lineno,
-                    node.end_lineno or node.lineno,
-                    _lines(source, node.lineno, node.end_lineno or node.lineno),
+                    start,
+                    end,
+                    _lines(source, start, end),
                 )
             )
         elif isinstance(node, ast.ClassDef):
-            class_code = _lines(source, node.lineno, node.end_lineno or node.lineno)
+            start = _node_start(node)
+            end = node.end_lineno or node.lineno
+            class_code = _lines(source, start, end)
             chunks.append(
                 _chunk(
                     rel,
                     node.name,
                     "class",
                     "",
-                    node.lineno,
-                    node.end_lineno or node.lineno,
+                    start,
+                    end,
                     class_code,
                 )
             )
             context = _class_signature(node) + "\n" + _docstring(node)
             for item in node.body:
                 if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    method_code = context + _lines(source, item.lineno, item.end_lineno or item.lineno)
+                    m_start = _node_start(item)
+                    m_end = item.end_lineno or item.lineno
+                    method_code = context + _lines(source, m_start, m_end)
                     chunks.append(
                         _chunk(
                             rel,
                             f"{node.name}.{item.name}",
                             "method",
                             node.name,
-                            item.lineno,
-                            item.end_lineno or item.lineno,
+                            m_start,
+                            m_end,
                             method_code,
                         )
                     )

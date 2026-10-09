@@ -8,10 +8,13 @@ from app.rag.ingest import get_collection, index_repo
 
 
 def _tokens(text: str) -> list[str]:
+    expanded = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", text)
     out = []
-    for token in re.findall(r"[a-z0-9_]+", text.lower()):
+    for token in re.findall(r"[a-z0-9_]+", expanded.lower()):
         out.extend(part for part in token.split("_") if part)
-    return out
+    for token in re.findall(r"[a-z0-9_]+", text.lower()):
+        out.append(token)
+    return list(dict.fromkeys(out))
 
 
 def _all_chunks(repo_path: str | pathlib.Path, persist_dir: str | pathlib.Path, embedder: Embedder | None):
@@ -33,7 +36,11 @@ def dense(
     embedder: Embedder | None = None,
 ) -> list[dict]:
     collection = get_collection(persist_dir, embedder)
-    res = collection.query(query_texts=[query], n_results=k, include=["metadatas", "documents", "distances"])
+    count = collection.count()
+    if count == 0:
+        return []
+    actual_k = min(k, count)
+    res = collection.query(query_texts=[query], n_results=actual_k, include=["metadatas", "documents", "distances"])
     docs = res.get("documents", [[]])[0]
     metas = res.get("metadatas", [[]])[0]
     dists = res.get("distances", [[]])[0]
@@ -57,7 +64,10 @@ def bm25(
     if not chunks:
         return []
     corpus = [_tokens(c["code"] + " " + c["id"] + " " + c["symbol"]) for c in chunks]
-    scores = BM25Okapi(corpus).get_scores(_tokens(query))
+    q_tokens = _tokens(query)
+    if not q_tokens:
+        return [dict(c, score=0.0) for c in chunks[:k]]
+    scores = BM25Okapi(corpus).get_scores(q_tokens)
     ranked = sorted(zip(chunks, scores), key=lambda x: x[1], reverse=True)[:k]
     out = []
     for chunk, score in ranked:

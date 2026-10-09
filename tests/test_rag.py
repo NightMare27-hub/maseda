@@ -104,6 +104,36 @@ def test_chunk_syntax_error_fallback(tmp_path):
     assert "def broken(:" in chunks[0]["code"]
 
 
+def test_chunk_preserves_decorators(tmp_path):
+    p = tmp_path / "decorated.py"
+    p.write_text(
+        "class Model:\n    @property\n    def value(self):\n        return 42\n",
+        encoding="utf-8",
+    )
+    chunks = chunk_python_file(p, tmp_path)
+    method = next(c for c in chunks if c["symbol"] == "Model.value")
+    assert "@property" in method["code"]
+    assert method["start_line"] == 2
+
+
+def test_dense_retrieval_guardrail_small_repo(tmp_path):
+    embedder = FakeEmbedder()
+    p = tmp_path / "tiny.py"
+    p.write_text("def single_func():\n    pass\n", encoding="utf-8")
+    index_repo(tmp_path, tmp_path / "chroma", embedder)
+    results = dense("query", 10, tmp_path, tmp_path / "chroma", embedder)
+    assert len(results) > 0
+
+
+def test_bm25_camel_case_tokenization(tmp_path):
+    embedder = FakeEmbedder()
+    p = tmp_path / "service.py"
+    p.write_text("class UserAuthenticationManager:\n    pass\n", encoding="utf-8")
+    index_repo(tmp_path, tmp_path / "chroma", embedder)
+    results = bm25("authentication", 5, tmp_path, tmp_path / "chroma", embedder)
+    assert any("UserAuthenticationManager" in r["symbol"] for r in results)
+
+
 def _rank(results, expected):
     for idx, r in enumerate(results, start=1):
         if r.get("symbol") == expected:
