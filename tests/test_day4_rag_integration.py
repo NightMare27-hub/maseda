@@ -271,7 +271,9 @@ def test_planner_prompt_includes_approach_requirement(tmp_path):
     with patch("app.agents.planner.ask_json") as mock_ask:
         mock_ask.return_value = (
             {
-                "approach": "Building a headless SnakeGame engine without GUI",
+                "approach": "Building a headless SnakeGame engine with CLI",
+                "logic_contract": "SnakeGame step, collision, eating logic",
+                "operational_contract": "Playable terminal game loop",
                 "files": ["snake.py", "test_snake.py"],
                 "steps": ["step 1"],
             },
@@ -280,8 +282,43 @@ def test_planner_prompt_includes_approach_requirement(tmp_path):
         res = planner(state)
 
     system_prompt = mock_ask.call_args[0][0]
-    assert "approach" in system_prompt
-    assert res["plan"]["approach"] == "Building a headless SnakeGame engine without GUI"
+    assert "logic_contract" in system_prompt
+    assert "operational_contract" in system_prompt
+    assert res["plan"]["approach"] == "Building a headless SnakeGame engine with CLI"
+    assert res["plan"]["logic_contract"] == "SnakeGame step, collision, eating logic"
+    assert res["plan"]["operational_contract"] == "Playable terminal game loop"
+
+
+def test_reviewer_dual_gate_rejects_dummy_stubs(tmp_path):
+    from app.agents.reviewer import reviewer
+
+    state = {
+        "task": "create interactive snake game",
+        "plan": {"files": ["snake.py", "test_snake.py"]},
+        "edits": {"snake.py": "print('static snapshot')"},
+        "repo_path": str(tmp_path),
+        "run_id": "test_gate2",
+        "tests_passed": True,  # Gate 1 passed
+        "test_output": "1 passed in 0.01s",
+    }
+    with patch("app.agents.reviewer.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approved": False,  # Gate 2 rejected due to dummy stub
+                "summary": "Gate 2 failed: entrypoint is a dummy static print",
+                "feedback": "Provide a real interactive while loop for human play",
+                "suggested_fixes": ["implement playable while loop in main"],
+                "user_explanation": "Tests passed, but the game is not playable for humans. Coder must provide an interactive loop.",
+            },
+            {"tokens": 50, "cost": 0.0001, "seconds": 0.05},
+        )
+        res = reviewer(state)
+
+    assert res["review_approved"] is False
+    system_prompt = mock_ask.call_args[0][0]
+    assert "Gate 2" in system_prompt
+    assert "DUAL-GATE REVIEW PROTOCOL" in system_prompt
+
 
 
 

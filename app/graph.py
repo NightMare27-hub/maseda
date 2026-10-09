@@ -28,6 +28,8 @@ def _report_progress(node_name: str, update: dict):
         print("\n[+] [PLANNER] Plan formulated:")
         if approach:
             print(f"    - Strategy: {approach}")
+        if plan.get("operational_contract"):
+            print(f"    - User Interface: {plan['operational_contract']}")
         print(f"    - Target files: {files}")
     elif node_name == "coder":
         edits = update.get("edits", {})

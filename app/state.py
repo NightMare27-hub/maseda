@@ -8,7 +8,7 @@ class State(TypedDict, total=False):
     task: str
     repo_path: str
     run_id: str
-    plan: dict          # {"files": [...], "steps": [...]}
+    plan: dict          # {"approach": str, "logic_contract": str, "operational_contract": str, "files": list, "steps": list}
     edits: dict         # {"relative/path.py": "full new file content"}
     diff: str
     test_output: str

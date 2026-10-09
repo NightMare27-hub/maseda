@@ -4,10 +4,17 @@ from app.tools.files import is_test_file, list_py_files
 
 SYSTEM = """You are the Planner in a multi-agent software team.
 Given a coding task and the list of Python files in a repo, decide which files must be
-changed or created, the technical approach and assumptions, and the ordered steps to do it. Be minimal.
+changed or created, the technical strategy, and the ordered steps to do it. Be minimal.
+
+You must define a Dual-Contract Architecture:
+1. logic_contract: Core algorithms, classes, and logic to be validated with automated pytest unit tests.
+2. operational_contract: How human users will run/interact with the software (e.g. interactive CLI loop, command arguments, importable module).
+
 Respond with ONLY a JSON object:
 {
-  "approach": "Clear 1-2 sentence description of technical strategy, assumptions, and constraints (e.g. headless programmatic engine vs desktop GUI)",
+  "approach": "Clear 1-2 sentence description of technical strategy and assumptions",
+  "logic_contract": "What backend methods/classes pytest will test programmatically",
+  "operational_contract": "How human users will run and interact with the entrypoint",
   "files": ["relative/path.py"],
   "steps": ["step 1", "step 2"]
 }
@@ -51,8 +58,12 @@ def planner(state):
     user = f"TASK:\n{state['task']}\n\nREPO FILES:\n{repo_files_str}{rag_context}{test_guidance}"
     data, meta = ask_json(SYSTEM, user)
     approach = str(data.get("approach", "")).strip()
+    logic_contract = str(data.get("logic_contract", "")).strip()
+    operational_contract = str(data.get("operational_contract", "")).strip()
     plan = {
         "approach": approach,
+        "logic_contract": logic_contract,
+        "operational_contract": operational_contract,
         "files": [f for f in data.get("files", []) if isinstance(f, str)],
         "steps": [str(s) for s in data.get("steps", [])],
     }
