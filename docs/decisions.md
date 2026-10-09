@@ -21,6 +21,7 @@
 | 2026-10-10 | Dynamic Gemini model cascade & live streaming progress | Automatically queries Google API for available models with matching capabilities and fails over upon 503/429 overload; streams LangGraph nodes live with upfront technical approach strategy to eliminate silent black-box delays. | Hardcoded fallback lists, waiting through 5 retries on dead models, and keeping terminal silent until completion. |
 | 2026-10-10 | Dual-Contract Architecture & Dual-Gate Review Protocol | Planner decomposes tasks into a programmatic logic_contract (for pytest) and operational_contract (for humans); Reviewer enforces Gate 1 (automated test pass) and Gate 2 (human usability audit) to reject dummy stubs that pass tests by crippling interactive features. | Single-metric optimization (Goodhart's Law) where agents stub out user interfaces to ensure tests pass. |
 | 2026-10-10 | Externalized Engineering Guidelines in Markdown (`docs/agent_guidelines.md`) | Replaces bloated ad-hoc Python prompt strings with a standardized, editable Markdown document that Coder and Reviewer load dynamically; paves the way for Policy-RAG retrieval. | Hardcoded prompt sprawl across Python source files requiring code changes for every new rule. |
+| 2026-10-10 | Extended 90s LLM timeout for large code generation | Complex files with hundreds of lines take 30-50s to stream; a 30s timeout triggered premature failover cascades across healthy models. | 30s timeout causing false failovers, or infinite timeout blocking indefinitely. |
 
 
 

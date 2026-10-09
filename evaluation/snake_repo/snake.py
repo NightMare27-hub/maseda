@@ -202,15 +202,87 @@ def run_curses(stdscr: Any) -> None:
     stdscr.getch()
 
 
+def run_msvcrt() -> None:
+    """Run a real-time interactive game loop in the Windows terminal using msvcrt."""
+    import msvcrt
+    import os
+    import time
+
+    # Initialize VT100 support on Windows console
+    os.system("")
+    os.system("cls")
+
+    game = SnakeGame(width=20, height=12)
+
+    key_mapping = {
+        b"w": Direction.UP,
+        b"s": Direction.DOWN,
+        b"a": Direction.LEFT,
+        b"d": Direction.RIGHT,
+        b"W": Direction.UP,
+        b"S": Direction.DOWN,
+        b"A": Direction.LEFT,
+        b"D": Direction.RIGHT,
+    }
+
+    special_mapping = {
+        b"H": Direction.UP,     # Up arrow
+        b"P": Direction.DOWN,   # Down arrow
+        b"K": Direction.LEFT,   # Left arrow
+        b"M": Direction.RIGHT,  # Right arrow
+    }
+
+    print("\033[?25l", end="", flush=True)  # Hide cursor
+    try:
+        while not game.game_over:
+            # Drain input buffer
+            while msvcrt.kbhit():
+                ch = msvcrt.getch()
+                if ch in (b"\x00", b"\xe0"):
+                    ch2 = msvcrt.getch()
+                    if ch2 in special_mapping:
+                        game.change_direction(special_mapping[ch2])
+                elif ch in (b"q", b"Q", b"\x1b"):
+                    game.game_over = True
+                    break
+                elif ch in key_mapping:
+                    game.change_direction(key_mapping[ch])
+
+            if game.game_over:
+                break
+
+            game.step()
+            # Reset cursor to top-left to redraw smoothly without flicker
+            print("\033[H", end="")
+            print(f"Score: {game.score} | Controls: WASD or Arrow Keys | Press 'q' to quit  ")
+            print(game.render_ascii())
+            time.sleep(0.12)
+    finally:
+        print("\033[?25h", end="", flush=True)  # Restore cursor
+
+    print()
+    if game.won:
+        print(f"Congratulations! You won with score: {game.score}!")
+    else:
+        print(f"Game Over! Final Score: {game.score}")
+
+
 def main() -> None:
+    import sys
+
+    if sys.platform == "win32":
+        try:
+            run_msvcrt()
+            return
+        except Exception as e:
+            print(f"Notice: Native Windows interface stopped ({e}).")
+
     if curses is not None:
         try:
             curses.wrapper(run_curses)
             return
         except Exception as e:
             print(f"Could not start curses interface: {e}")
-    else:
-        print("Curses is not installed on this system.")
 
     print("Running headless demonstration:")
     game = SnakeGame(width=10, height=10)
@@ -219,3 +291,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

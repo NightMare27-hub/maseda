@@ -121,7 +121,7 @@ def _complete(system: str, user: str):
                 model=model,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
                 num_retries=1,   # Fast failover to healthy models in cascade
-                timeout=30,      # A stuck call fails quickly so cascade can try next model
+                timeout=90,      # Generous timeout so large code generations do not fail prematurely
                 **extra,
             )
             text = r.choices[0].message.content or ""
