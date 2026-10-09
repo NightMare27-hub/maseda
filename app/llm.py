@@ -26,31 +26,129 @@ def _friendly(e: Exception) -> str:
     return f"Model call failed: {str(e)[:300]}"
 
 
+_DISCOVERED_GEMINI_MODELS: list[str] | None = None
+
+
+def discover_gemini_models() -> list[str]:
+    """Dynamically query Google API to find all text generation models this key has access to."""
+    global _DISCOVERED_GEMINI_MODELS
+    if _DISCOVERED_GEMINI_MODELS is not None:
+        return _DISCOVERED_GEMINI_MODELS
+
+    key = os.environ.get("GEMINI_API_KEY")
+    if not key:
+        _DISCOVERED_GEMINI_MODELS = []
+        return []
+
+    try:
+        import urllib.request
+        req = urllib.request.Request(
+            "https://generativelanguage.googleapis.com/v1beta/models",
+            headers={"x-goog-api-key": key},
+        )
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            models = []
+            for m in data.get("models", []):
+                name = m.get("name", "").replace("models/", "")
+                methods = m.get("supportedGenerationMethods", [])
+                if "generateContent" not in methods:
+                    continue
+                # Filter out specialized audio/vision-only/preview artifacts
+                if any(x in name for x in ["tts", "image", "imagen", "embedding", "clip", "transcribe", "banana", "robotics", "computer-use"]):
+                    continue
+                models.append(name)
+            _DISCOVERED_GEMINI_MODELS = models
+            return models
+    except Exception:
+        _DISCOVERED_GEMINI_MODELS = []
+        return []
+
+
+def get_model_cascade(primary_model: str) -> list[str]:
+    """Return an ordered cascade of models with similar capabilities."""
+    if not (primary_model.startswith("gemini/") or "gemini" in primary_model):
+        return [primary_model]
+
+    raw_primary = primary_model.replace("gemini/", "")
+    discovered = discover_gemini_models()
+
+    if not discovered:
+        # Fallback list if discovery request fails or offline
+        fallback_names = [
+            "gemini-2.5-flash",
+            "gemini-flash-latest",
+            "gemini-2.5-flash-lite",
+            "gemini-flash-lite-latest",
+            "gemini-2.5-pro",
+        ]
+    else:
+        is_flash = "flash" in raw_primary or "lite" in raw_primary
+        if is_flash:
+            # Prioritize similar fast flash models, then pro models
+            flash_models = [m for m in discovered if "flash" in m or "lite" in m]
+            pro_models = [m for m in discovered if "pro" in m]
+            fallback_names = flash_models + pro_models
+        else:
+            # Prioritize deep reasoning pro models, then flash models
+            pro_models = [m for m in discovered if "pro" in m]
+            flash_models = [m for m in discovered if "flash" in m or "lite" in m]
+            fallback_names = pro_models + flash_models
+
+    # Ensure primary model is first, and all candidates are unique and prefixed with gemini/
+    ordered = [raw_primary] + [m for m in fallback_names if m != raw_primary]
+    final_cascade = [f"gemini/{m}" if not m.startswith("gemini/") else m for m in ordered[:4]]
+    return final_cascade
+
+
 def _complete(system: str, user: str):
     import litellm  # imported lazily so tests can run without it
 
     litellm.drop_params = True
-    model = os.environ["MODEL"]
-    extra = {} if model.startswith("gemini/") else {"temperature": 0}
+    primary_model = os.environ.get("MODEL", "gemini/gemini-2.5-flash")
+    candidates = get_model_cascade(primary_model)
     t = time.time()
-    try:
-        r = litellm.completion(
-            model=model,
-            messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-            num_retries=5,   # retries temporary errors (503, 429) with waiting between tries
-            timeout=90,      # a stuck call fails instead of hanging forever
-            **extra,
-        )
-    except Exception as e:
-        raise RuntimeError(_friendly(e)) from None
-    text = r.choices[0].message.content or ""
-    usage = getattr(r, "usage", None)
-    tokens = getattr(usage, "total_tokens", 0) if usage else 0
-    try:
-        cost = litellm.completion_cost(completion_response=r) or 0.0
-    except Exception:
-        cost = 0.0
-    return text, {"tokens": tokens, "cost": round(cost, 6), "seconds": round(time.time() - t, 2)}
+    last_err = None
+
+    for i, model in enumerate(candidates):
+        extra = {} if model.startswith("gemini/") else {"temperature": 0}
+        try:
+            r = litellm.completion(
+                model=model,
+                messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
+                num_retries=2,   # Fast retry per candidate before cascading
+                timeout=60,      # A stuck call fails quickly so cascade can try next model
+                **extra,
+            )
+            text = r.choices[0].message.content or ""
+            usage = getattr(r, "usage", None)
+            tokens = getattr(usage, "total_tokens", 0) if usage else 0
+            try:
+                cost = litellm.completion_cost(completion_response=r) or 0.0
+            except Exception:
+                cost = 0.0
+            return text, {
+                "tokens": tokens,
+                "cost": round(cost, 6),
+                "seconds": round(time.time() - t, 2),
+                "model": model,
+            }
+        except Exception as e:
+            last_err = e
+            m_err = str(e).lower()
+            is_overloaded = any(
+                code in m_err
+                for code in ("503", "unavailable", "overloaded", "high demand", "429", "rate limit", "rate_limit", "resource_exhausted")
+            )
+            if is_overloaded and i < len(candidates) - 1:
+                next_model = candidates[i + 1]
+                print(f"\n[!] Model '{model}' is temporarily overloaded ({_friendly(e)}).")
+                print(f"[*] Dynamically cascading to similar model '{next_model}'...")
+                continue
+            else:
+                raise RuntimeError(_friendly(e)) from None
+
+    raise RuntimeError(_friendly(last_err)) if last_err else RuntimeError("Model call failed")
 
 
 def parse_json(text: str) -> dict:

@@ -242,5 +242,48 @@ def test_reviewer_generates_user_explanation(tmp_path):
     assert res["reviewer_feedback"]["user_explanation"] == res["user_explanation"]
 
 
+def test_gemini_model_cascade_generation(monkeypatch):
+    from app.llm import get_model_cascade
+
+    # Non-gemini model should return only itself
+    assert get_model_cascade("openai/gpt-4o") == ["openai/gpt-4o"]
+
+    # Mock discovered models
+    monkeypatch.setattr(
+        "app.llm.discover_gemini_models",
+        lambda: ["gemini-2.5-flash", "gemini-flash-latest", "gemini-2.5-pro", "gemini-2.5-flash-lite"],
+    )
+
+    cascade = get_model_cascade("gemini/gemini-2.5-flash")
+    assert cascade[0] == "gemini/gemini-2.5-flash"
+    assert len(cascade) > 1
+    assert any("flash" in m for m in cascade[1:])
+
+
+def test_planner_prompt_includes_approach_requirement(tmp_path):
+    from app.agents.planner import planner
+
+    state = {
+        "task": "build snake engine",
+        "repo_path": str(tmp_path),
+        "run_id": "test_approach",
+    }
+    with patch("app.agents.planner.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approach": "Building a headless SnakeGame engine without GUI",
+                "files": ["snake.py", "test_snake.py"],
+                "steps": ["step 1"],
+            },
+            {"tokens": 40, "cost": 0.0001, "seconds": 0.05},
+        )
+        res = planner(state)
+
+    system_prompt = mock_ask.call_args[0][0]
+    assert "approach" in system_prompt
+    assert res["plan"]["approach"] == "Building a headless SnakeGame engine without GUI"
+
+
+
 
 
