@@ -65,8 +65,13 @@ def discover_gemini_models() -> list[str]:
         return []
 
 
+def _version_sort_key(name: str) -> float:
+    match = re.search(r"(\d+(?:\.\d+)?)", name)
+    return float(match.group(1)) if match else 0.0
+
+
 def get_model_cascade(primary_model: str) -> list[str]:
-    """Return an ordered cascade of models with similar capabilities."""
+    """Return an ordered cascade of models with similar capabilities, prioritizing modern versions."""
     if not (primary_model.startswith("gemini/") or "gemini" in primary_model):
         return [primary_model]
 
@@ -76,28 +81,27 @@ def get_model_cascade(primary_model: str) -> list[str]:
     if not discovered:
         # Fallback list if discovery request fails or offline
         fallback_names = [
+            "gemini-3.8-flash",
+            "gemini-3.7-flash",
+            "gemini-3.6-flash",
+            "gemini-3.5-flash-lite",
             "gemini-2.5-flash",
-            "gemini-flash-latest",
-            "gemini-2.5-flash-lite",
-            "gemini-flash-lite-latest",
-            "gemini-2.5-pro",
         ]
     else:
         is_flash = "flash" in raw_primary or "lite" in raw_primary
+        flash_models = [m for m in discovered if "flash" in m or "lite" in m]
+        pro_models = [m for m in discovered if "pro" in m]
+        flash_models.sort(key=_version_sort_key, reverse=True)
+        pro_models.sort(key=_version_sort_key, reverse=True)
+
         if is_flash:
-            # Prioritize similar fast flash models, then pro models
-            flash_models = [m for m in discovered if "flash" in m or "lite" in m]
-            pro_models = [m for m in discovered if "pro" in m]
             fallback_names = flash_models + pro_models
         else:
-            # Prioritize deep reasoning pro models, then flash models
-            pro_models = [m for m in discovered if "pro" in m]
-            flash_models = [m for m in discovered if "flash" in m or "lite" in m]
             fallback_names = pro_models + flash_models
 
     # Ensure primary model is first, and all candidates are unique and prefixed with gemini/
     ordered = [raw_primary] + [m for m in fallback_names if m != raw_primary]
-    final_cascade = [f"gemini/{m}" if not m.startswith("gemini/") else m for m in ordered[:4]]
+    final_cascade = [f"gemini/{m}" if not m.startswith("gemini/") else m for m in ordered[:5]]
     return final_cascade
 
 
@@ -105,7 +109,7 @@ def _complete(system: str, user: str):
     import litellm  # imported lazily so tests can run without it
 
     litellm.drop_params = True
-    primary_model = os.environ.get("MODEL", "gemini/gemini-2.5-flash")
+    primary_model = os.environ.get("MODEL", "gemini/gemini-3.8-flash")
     candidates = get_model_cascade(primary_model)
     t = time.time()
     last_err = None
@@ -116,8 +120,8 @@ def _complete(system: str, user: str):
             r = litellm.completion(
                 model=model,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
-                num_retries=2,   # Fast retry per candidate before cascading
-                timeout=60,      # A stuck call fails quickly so cascade can try next model
+                num_retries=1,   # Fast failover to healthy models in cascade
+                timeout=30,      # A stuck call fails quickly so cascade can try next model
                 **extra,
             )
             text = r.choices[0].message.content or ""
@@ -136,13 +140,27 @@ def _complete(system: str, user: str):
         except Exception as e:
             last_err = e
             m_err = str(e).lower()
-            is_overloaded = any(
+            is_failover_candidate = any(
                 code in m_err
-                for code in ("503", "unavailable", "overloaded", "high demand", "429", "rate limit", "rate_limit", "resource_exhausted")
+                for code in (
+                    "503",
+                    "unavailable",
+                    "overloaded",
+                    "high demand",
+                    "429",
+                    "rate limit",
+                    "rate_limit",
+                    "resource_exhausted",
+                    "timeout",
+                    "timed out",
+                    "not_found",
+                    "404",
+                    "no longer available",
+                )
             )
-            if is_overloaded and i < len(candidates) - 1:
+            if is_failover_candidate and i < len(candidates) - 1:
                 next_model = candidates[i + 1]
-                print(f"\n[!] Model '{model}' is temporarily overloaded ({_friendly(e)}).")
+                print(f"\n[!] Model '{model}' unavailable or timed out ({_friendly(e)}).")
                 print(f"[*] Dynamically cascading to similar model '{next_model}'...")
                 continue
             else:
