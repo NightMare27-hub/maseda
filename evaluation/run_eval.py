@@ -37,6 +37,13 @@ def parse_args():
         action="store_true",
         help="Run in offline mock mode using golden solutions (0 API cost, instant test)",
     )
+    ap.add_argument("--rag", action="store_true", help="Enable AST-based RAG context retrieval")
+    ap.add_argument(
+        "--rag-mode",
+        choices=["hybrid", "dense", "bm25"],
+        default="hybrid",
+        help="RAG retrieval mode when --rag is active (default: hybrid)",
+    )
     return ap.parse_args()
 
 
@@ -52,7 +59,7 @@ def copy_repo(repo_rel: str) -> str:
     return dest
 
 
-def run_single_task(task: dict, is_mock: bool = False) -> dict:
+def run_single_task(task: dict, is_mock: bool = False, rag: bool = False, rag_mode: str = "hybrid") -> dict:
     repo_copy = copy_repo(task["repo"])
     t0 = time.time()
 
@@ -77,12 +84,12 @@ def run_single_task(task: dict, is_mock: bool = False) -> dict:
             orig_complete = getattr(llm, "_complete", None)
             llm._complete = lambda s, u: (json.dumps(next(replies)), {"tokens": 120, "cost": 0.0003, "seconds": 0.1})
             try:
-                res = run_task(task["instruction"], repo_copy)
+                res = run_task(task["instruction"], repo_copy, rag=rag, rag_mode=rag_mode)
             finally:
                 if orig_complete:
                     llm._complete = orig_complete
         else:
-            res = run_task(task["instruction"], repo_copy)
+            res = run_task(task["instruction"], repo_copy, rag=rag, rag_mode=rag_mode)
 
         return {
             "id": task["id"],
@@ -132,6 +139,7 @@ def generate_reports(summary: dict, report_path: pathlib.Path):
         f"- **Total Cost:** ${summary['total_cost']:.4f}",
         f"- **Avg Tokens per Task:** {summary['avg_tokens']}",
         f"- **Avg Latency:** {summary['avg_seconds']:.2f}s",
+        f"- **RAG Enabled:** {summary.get('rag', False)} ({summary.get('rag_mode', 'none')})",
         "",
         "## Performance by Task Category",
         "| Category | Tasks | Passed | Pass Rate (%) | Avg Rounds | Avg Tokens | Avg Time (s) |",
@@ -195,6 +203,8 @@ def main():
         tasks = tasks[: args.limit]
 
     mode_label = "MOCK (Offline)" if args.mock else "LIVE (Model)"
+    if args.rag:
+        mode_label += f" + RAG ({args.rag_mode})"
     print(f"Running evaluation benchmark on {len(tasks)} task(s) [{mode_label}]...")
     results = []
     out_path = pathlib.Path(args.output)
@@ -203,7 +213,7 @@ def main():
 
     for i, task in enumerate(tasks, 1):
         print(f"\n[{i}/{len(tasks)}] Starting {task['id']}: {task['name']} ({task.get('category')})...")
-        r = run_single_task(task, is_mock=args.mock)
+        r = run_single_task(task, is_mock=args.mock, rag=args.rag, rag_mode=args.rag_mode)
         results.append(r)
         status_icon = "[PASS]" if r["status"] == "success" else "[FAIL]"
         pre_icon = "[PRE:FAIL]" if not r["pre_test_passed"] else "[PRE:PASS]"
@@ -242,6 +252,8 @@ def main():
 
     summary = {
         "mode": mode_label,
+        "rag": args.rag,
+        "rag_mode": args.rag_mode if args.rag else "none",
         "total_tasks": total,
         "success_count": successes,
         "success_rate_pct": round(pass_rate, 2),

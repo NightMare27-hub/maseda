@@ -21,6 +21,9 @@ class State(TypedDict, total=False):
     total_tokens: int
     total_cost: float
     total_seconds: float
+    rag_enabled: bool
+    rag_mode: str       # hybrid | dense | bm25
+    retrieved_chunks: list[dict]
 
 
 def route(state: State) -> str:

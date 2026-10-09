@@ -20,13 +20,16 @@ def build_graph():
     return g.compile()
 
 
-def run_task(task: str, repo_path: str) -> dict:
+def run_task(task: str, repo_path: str, rag: bool = False, rag_mode: str = "hybrid") -> dict:
     run_id = new_run_id()
-    log(run_id, event="start", task=task, repo=repo_path)
+    log(run_id, event="start", task=task, repo=repo_path, rag=rag, rag_mode=rag_mode)
     final = build_graph().invoke({
         "task": task,
         "repo_path": repo_path,
         "run_id": run_id,
+        "rag_enabled": rag,
+        "rag_mode": rag_mode,
+        "retrieved_chunks": [],
         "total_tokens": 0,
         "total_cost": 0.0,
         "total_seconds": 0.0,
@@ -37,6 +40,9 @@ def run_task(task: str, repo_path: str) -> dict:
         event="end",
         status=final["status"],
         iterations=final["iteration"],
+        rag=rag,
+        rag_mode=rag_mode,
+        rag_chunks=len(final.get("retrieved_chunks", [])),
         total_tokens=final.get("total_tokens", 0),
         total_cost=final.get("total_cost", 0.0),
         total_seconds=final.get("total_seconds", 0.0),

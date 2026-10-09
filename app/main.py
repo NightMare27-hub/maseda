@@ -9,15 +9,25 @@ def main():
     ap.add_argument("--repo", required=True, help="path to a Python repo")
     ap.add_argument("--task", required=True, help="what to do, in plain language")
     ap.add_argument("--apply", action="store_true", help="write the edits into the repo")
+    ap.add_argument("--rag", action="store_true", help="enable AST-based RAG context retrieval")
+    ap.add_argument(
+        "--rag-mode",
+        choices=["hybrid", "dense", "bm25"],
+        default="hybrid",
+        help="retrieval mode when --rag is active (default: hybrid)",
+    )
     a = ap.parse_args()
 
     try:
-        r = run_task(a.task, a.repo)
+        r = run_task(a.task, a.repo, rag=a.rag, rag_mode=a.rag_mode)
     except RuntimeError as e:
         raise SystemExit(f"ERROR: {e}")
     print("PLAN:", r["plan"])
     print("\nDIFF:\n" + (r["diff"] or "(no changes)"))
     print(f"\nSTATUS: {r['status']} after {r['iteration']} round(s). Run id: {r['run_id']}")
+    if a.rag:
+        chunk_count = len(r.get("retrieved_chunks", []))
+        print(f"RAG: enabled ({a.rag_mode}) | {chunk_count} chunk(s) injected into context")
     rf = r.get("reviewer_feedback", {})
     if rf and rf.get("summary"):
         print(f"REVIEW: {rf['summary']}")
