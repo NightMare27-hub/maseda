@@ -24,6 +24,9 @@ def _function_signature(node: ast.AST) -> str:
 
 def _chunk(file: str, symbol: str, kind: str, parent: str, start: int, end: int, code: str) -> dict:
     chunk_id = f"{file}::{symbol}"
+    char_count = len(code)
+    line_count = (end - start + 1) if (end >= start and code) else 0
+    token_estimate = max(1, (char_count + 3) // 4) if char_count > 0 else 0
     return {
         "id": chunk_id,
         "file": file,
@@ -33,6 +36,9 @@ def _chunk(file: str, symbol: str, kind: str, parent: str, start: int, end: int,
         "start_line": start,
         "end_line": end,
         "code": code,
+        "char_count": char_count,
+        "line_count": line_count,
+        "token_estimate": token_estimate,
     }
 
 

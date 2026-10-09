@@ -22,7 +22,12 @@ def iter_py_files(repo_path: str | pathlib.Path) -> list[pathlib.Path]:
 
 def get_collection(persist_dir: str | pathlib.Path = "chroma_db", embedder: Embedder | None = None):
     client = chromadb.PersistentClient(path=str(persist_dir))
-    ef = ChromaEmbeddingAdapter(embedder) if embedder else None
+    if embedder:
+        ef = ChromaEmbeddingAdapter(embedder)
+    else:
+        from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
+
+        ef = DefaultEmbeddingFunction()
     return client.get_or_create_collection(COLLECTION, embedding_function=ef)
 
 

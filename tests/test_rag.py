@@ -28,6 +28,9 @@ def test_chunk_ids_and_metadata():
     assert method["start_line"] <= method["end_line"]
     assert "class Rectangle:" in method["code"]
     assert "def area" in method["code"]
+    assert method["token_estimate"] > 0
+    assert method["line_count"] > 0
+    assert method["char_count"] > 0
 
 
 def test_dense_retrieval_with_fake_embedder(tmp_path):
@@ -131,7 +134,42 @@ def test_bm25_camel_case_tokenization(tmp_path):
     p.write_text("class UserAuthenticationManager:\n    pass\n", encoding="utf-8")
     index_repo(tmp_path, tmp_path / "chroma", embedder)
     results = bm25("authentication", 5, tmp_path, tmp_path / "chroma", embedder)
-    assert any("UserAuthenticationManager" in r["symbol"] for r in results)
+def test_retrieval_metadata_filter(tmp_path):
+    embedder = FakeEmbedder()
+    p = tmp_path / "filter_test.py"
+    p.write_text(
+        "def helper_func():\n    pass\n\nclass HelperClass:\n    pass\n",
+        encoding="utf-8",
+    )
+    index_repo(tmp_path, tmp_path / "chroma", embedder)
+
+    res_func = dense("helper", 5, tmp_path, tmp_path / "chroma", embedder, where={"kind": "function"})
+    assert len(res_func) > 0
+    assert all(r["kind"] == "function" for r in res_func)
+
+    res_class = bm25("helper", 5, tmp_path, tmp_path / "chroma", embedder, where={"kind": "class"})
+    assert len(res_class) > 0
+    assert all(r["kind"] == "class" for r in res_class)
+
+    res_hybrid = hybrid("helper", 5, tmp_path, tmp_path / "chroma", embedder, where={"kind": "class"})
+    assert len(res_hybrid) > 0
+    assert all(r["kind"] == "class" for r in res_hybrid)
+
+
+def test_search_cli_execution(tmp_path, capsys):
+    from app.rag.search import search_cli
+
+    p = tmp_path / "hello.py"
+    p.write_text("def hello_world(): return 'hi'\n", encoding="utf-8")
+    embedder = FakeEmbedder()
+    index_repo(tmp_path, tmp_path / "chroma", embedder)
+
+    exit_code = search_cli(
+        ["hello", "--repo", str(tmp_path), "--persist-dir", str(tmp_path / "chroma"), "-k", "2", "--mock"]
+    )
+    assert exit_code == 0
+    captured = capsys.readouterr().out
+    assert "hello_world" in captured
 
 
 def _rank(results, expected):

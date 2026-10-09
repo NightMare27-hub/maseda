@@ -9,6 +9,8 @@ __pycache__/
 # data and runs
 logs/*.jsonl
 chroma_db/
+chroma_eval/
+evaluation/results/chroma_eval/
 work/
 # editors and OS
 .vscode/

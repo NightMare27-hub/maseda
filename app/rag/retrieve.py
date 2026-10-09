@@ -34,13 +34,21 @@ def dense(
     repo_path: str | pathlib.Path = ".",
     persist_dir: str | pathlib.Path = "chroma_db",
     embedder: Embedder | None = None,
+    where: dict | None = None,
 ) -> list[dict]:
     collection = get_collection(persist_dir, embedder)
     count = collection.count()
     if count == 0:
         return []
     actual_k = min(k, count)
-    res = collection.query(query_texts=[query], n_results=actual_k, include=["metadatas", "documents", "distances"])
+    query_kwargs = {
+        "query_texts": [query],
+        "n_results": actual_k,
+        "include": ["metadatas", "documents", "distances"],
+    }
+    if where:
+        query_kwargs["where"] = where
+    res = collection.query(**query_kwargs)
     docs = res.get("documents", [[]])[0]
     metas = res.get("metadatas", [[]])[0]
     dists = res.get("distances", [[]])[0]
@@ -59,8 +67,11 @@ def bm25(
     repo_path: str | pathlib.Path = ".",
     persist_dir: str | pathlib.Path = "chroma_db",
     embedder: Embedder | None = None,
+    where: dict | None = None,
 ) -> list[dict]:
     chunks = _all_chunks(repo_path, persist_dir, embedder)
+    if where:
+        chunks = [c for c in chunks if all(c.get(k) == v for k, v in where.items())]
     if not chunks:
         return []
     corpus = [_tokens(c["code"] + " " + c["id"] + " " + c["symbol"]) for c in chunks]
@@ -83,10 +94,11 @@ def hybrid(
     repo_path: str | pathlib.Path = ".",
     persist_dir: str | pathlib.Path = "chroma_db",
     embedder: Embedder | None = None,
+    where: dict | None = None,
 ) -> list[dict]:
     lists = [
-        dense(query, k, repo_path, persist_dir, embedder),
-        bm25(query, k, repo_path, persist_dir, embedder),
+        dense(query, k, repo_path, persist_dir, embedder, where=where),
+        bm25(query, k, repo_path, persist_dir, embedder, where=where),
     ]
     by_id = {}
     scores = {}
