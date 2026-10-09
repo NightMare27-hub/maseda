@@ -33,10 +33,18 @@ def main():
         print(f"REVIEW: {rf['summary']}")
         if rf.get("feedback") and r["status"] != "success":
             print(f"DIAGNOSIS: {rf['feedback']}")
+
+    user_exp = r.get("user_explanation") or rf.get("user_explanation")
+    if user_exp:
+        print("\n" + "=" * 60)
+        print("EXPLANATION FOR USERS (PLAIN ENGLISH):")
+        print(user_exp)
+        print("=" * 60)
+
     tokens = r.get("total_tokens", 0)
     cost = r.get("total_cost", 0.0)
     seconds = r.get("total_seconds", 0.0)
-    print(f"METRICS: {tokens} tokens | ${cost:.4f} cost | {seconds:.2f}s elapsed")
+    print(f"\nMETRICS: {tokens} tokens | ${cost:.4f} cost | {seconds:.2f}s elapsed")
     if a.apply and r["status"] == "success":
         apply_edits(a.repo, r["edits"])
         print("Edits applied to the repo. Review with git diff.")

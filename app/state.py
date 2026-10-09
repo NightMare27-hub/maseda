@@ -14,7 +14,8 @@ class State(TypedDict, total=False):
     test_output: str
     tests_passed: bool
     review_approved: bool
-    reviewer_feedback: dict  # {"approved": bool, "summary": str, "feedback": str, "suggested_fixes": list}
+    reviewer_feedback: dict  # {"approved": bool, "summary": str, "feedback": str, "suggested_fixes": list, "user_explanation": str}
+    user_explanation: str   # Plain-English explanation for non-technical users
     iteration: int
     status: str         # retrying | success | failed
     stagnation_count: int

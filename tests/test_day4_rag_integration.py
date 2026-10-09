@@ -174,4 +174,73 @@ def test_coder_context_large_file_outline(tmp_path):
     assert "[FILE PREVIEW" in ctx
 
 
+def test_sandbox_diagnostic_hints(tmp_path, monkeypatch):
+    import subprocess
+    from app.tools import sandbox
+
+    class MockCompletedProcess:
+        def __init__(self, returncode, stdout, stderr=""):
+            self.returncode = returncode
+            self.stdout = stdout
+            self.stderr = stderr
+
+    # Test EOFError hint
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: MockCompletedProcess(1, "EOFError: EOF when reading a line"))
+    passed, out = sandbox.run_pytest(str(tmp_path))
+    assert passed is False
+    assert "[INTERACTIVE INPUT BLOCKED]" in out
+
+    # Test Network hint
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: MockCompletedProcess(1, "urllib.error.URLError: <urlopen error [Errno -3] Temporary failure in name resolution>"))
+    passed, out = sandbox.run_pytest(str(tmp_path))
+    assert passed is False
+    assert "[OFFLINE SANDBOX]" in out
+
+    # Test Headless display hint
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: MockCompletedProcess(1, "pygame.error: No available video device"))
+    passed, out = sandbox.run_pytest(str(tmp_path))
+    assert passed is False
+    assert "[HEADLESS DISPLAY]" in out
+
+    # Test TimeoutExpired
+    def raise_timeout(*args, **kwargs):
+        raise subprocess.TimeoutExpired(cmd="pytest", timeout=30)
+
+    monkeypatch.setattr(subprocess, "run", raise_timeout)
+    passed, out = sandbox.run_pytest(str(tmp_path), timeout=30)
+    assert passed is False
+    assert "[SANDBOX TIME LIMIT EXCEEDED]" in out
+
+
+def test_reviewer_generates_user_explanation(tmp_path):
+    from app.agents.reviewer import reviewer
+
+    state = {
+        "task": "build snake game with pygame",
+        "plan": {"files": ["snake.py"]},
+        "edits": {"snake.py": "import pygame"},
+        "repo_path": str(tmp_path),
+        "run_id": "test_user_exp",
+        "tests_passed": False,
+        "test_output": "[HEADLESS DISPLAY]: The code attempted to open a graphical window",
+    }
+    with patch("app.agents.reviewer.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approved": False,
+                "summary": "Display unavailable",
+                "feedback": "Do not open Pygame windows in headless tests",
+                "suggested_fixes": ["write pure snake game engine"],
+                "user_explanation": "MASEDA cannot open visual game windows because our testing servers run without a computer screen. Please request a non-visual game engine.",
+            },
+            {"tokens": 80, "cost": 0.0003, "seconds": 0.1},
+        )
+        res = reviewer(state)
+
+    assert "user_explanation" in res
+    assert "cannot open visual game windows" in res["user_explanation"]
+    assert res["reviewer_feedback"]["user_explanation"] == res["user_explanation"]
+
+
+
 
