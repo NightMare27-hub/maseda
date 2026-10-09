@@ -94,8 +94,26 @@ RECALL_QUERIES = [
 ]
 
 
-def _recall(results, expected):
-    return any(r["symbol"] == expected for r in results)
+def test_chunk_syntax_error_fallback(tmp_path):
+    broken = tmp_path / "broken.py"
+    broken.write_text("def broken(:\n    pass\n", encoding="utf-8")
+    chunks = chunk_python_file(broken, tmp_path)
+    assert len(chunks) == 1
+    assert chunks[0]["symbol"] == "module"
+    assert chunks[0]["kind"] == "module"
+    assert "def broken(:" in chunks[0]["code"]
+
+
+def _rank(results, expected):
+    for idx, r in enumerate(results, start=1):
+        if r.get("symbol") == expected:
+            return idx
+    return 0
+
+
+def _reciprocal_rank(results, expected):
+    rank = _rank(results, expected)
+    return 1.0 / rank if rank > 0 else 0.0
 
 
 @pytest.mark.slow
@@ -106,17 +124,43 @@ def test_recall_at_5_real_embedder(tmp_path, monkeypatch):
     persist = tmp_path / "chroma"
     index_repo(BENCH, persist)
 
-    dense_hits = 0
-    bm25_hits = 0
-    hybrid_hits = 0
+    d_r1, d_r5, d_rr = 0, 0, 0.0
+    b_r1, b_r5, b_rr = 0, 0, 0.0
+    h_r1, h_r5, h_rr = 0, 0, 0.0
+
     for query, expected in RECALL_QUERIES:
-        dense_hits += _recall(dense(query, 5, BENCH, persist), expected)
-        bm25_hits += _recall(bm25(query, 5, BENCH, persist), expected)
-        hybrid_hits += _recall(hybrid(query, 5, BENCH, persist), expected)
+        d_res = dense(query, 5, BENCH, persist)
+        b_res = bm25(query, 5, BENCH, persist)
+        h_res = hybrid(query, 5, BENCH, persist)
+
+        d_r = _rank(d_res, expected)
+        b_r = _rank(b_res, expected)
+        h_r = _rank(h_res, expected)
+
+        if d_r == 1:
+            d_r1 += 1
+        if 1 <= d_r <= 5:
+            d_r5 += 1
+        d_rr += 1.0 / d_r if d_r > 0 else 0.0
+
+        if b_r == 1:
+            b_r1 += 1
+        if 1 <= b_r <= 5:
+            b_r5 += 1
+        b_rr += 1.0 / b_r if b_r > 0 else 0.0
+
+        if h_r == 1:
+            h_r1 += 1
+        if 1 <= h_r <= 5:
+            h_r5 += 1
+        h_rr += 1.0 / h_r if h_r > 0 else 0.0
 
     total = len(RECALL_QUERIES)
     print(
-        f"recall@5 dense={dense_hits / total:.2%} "
-        f"bm25={bm25_hits / total:.2%} hybrid={hybrid_hits / total:.2%}"
+        f"\n--- IR Benchmark Evaluation ({total} Queries) ---\n"
+        f"Dense:  Recall@1={d_r1/total:.2%}, Recall@5={d_r5/total:.2%}, MRR={d_rr/total:.4f}\n"
+        f"BM25:   Recall@1={b_r1/total:.2%}, Recall@5={b_r5/total:.2%}, MRR={b_rr/total:.4f}\n"
+        f"Hybrid: Recall@1={h_r1/total:.2%}, Recall@5={h_r5/total:.2%}, MRR={h_rr/total:.4f}\n"
+        f"------------------------------------------------"
     )
-    assert dense_hits / total >= 0.80
+    assert d_r5 / total >= 0.80

@@ -41,7 +41,12 @@ def chunk_python_file(path: str | pathlib.Path, repo_root: str | pathlib.Path | 
     root = pathlib.Path(repo_root) if repo_root else p.parent
     rel = p.resolve().relative_to(root.resolve()).as_posix()
     source = p.read_text(encoding="utf-8")
-    tree = ast.parse(source)
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        lines = source.splitlines()
+        return [_chunk(rel, "module", "module", "", 1, max(1, len(lines)), source)]
+
     chunks = []
 
     module_nodes = (
