@@ -29,7 +29,7 @@ def run_pytest(workdir: str, timeout: int = 60):
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     env["PYTHONPATH"] = workdir
     try:
-        r = subprocess.run([sys.executable, "-m", "pytest", "-x", "-q"], cwd=workdir,
+        r = subprocess.run([sys.executable, "-m", "pytest", "-q", "--maxfail=10"], cwd=workdir,
                            capture_output=True, text=True, errors="replace", timeout=timeout, env=env)
     except subprocess.TimeoutExpired:
         return False, (
@@ -71,7 +71,7 @@ def run_entrypoint_smoke_tests(workdir: str, timeout: int = 15) -> tuple[bool, s
     entrypoints = [f for f in py_files if not is_test_file(f)]
 
     for rel in entrypoints:
-        full_path = os.path.join(workdir, rel)
+        full_path = os.path.abspath(os.path.join(workdir, rel))
         try:
             content = pathlib.Path(full_path).read_text(encoding="utf-8", errors="replace")
         except Exception:

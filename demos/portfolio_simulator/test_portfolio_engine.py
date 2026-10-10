@@ -44,6 +44,7 @@ def test_calculate_portfolio_metrics():
     assert metrics.expected_return == pytest.approx(0.07)
     assert metrics.volatility > 0.0
     assert isinstance(metrics.sharpe_ratio, float)
+    assert metrics.diversification_score == pytest.approx(2.0)  # Two equal weights (0.5, 0.5) -> 1 / (0.5^2 + 0.5^2) = 2.0
 
 def test_compound_growth_projection_basic():
     initial_balance = 10000.0

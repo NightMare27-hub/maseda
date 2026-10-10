@@ -257,6 +257,7 @@ with tab4:
             "expected_return": metrics.expected_return,
             "volatility": metrics.volatility,
             "sharpe_ratio": metrics.sharpe_ratio,
+            "diversification_score": metrics.diversification_score,
         }
         st.success(f"Scenario '{scenario_name}' saved successfully!")
 
@@ -270,7 +271,8 @@ with tab4:
                 "Monthly Contrib": format_currency(data["monthly_contribution"]),
                 "Years": data["years"],
                 "Exp. Return": format_percent(data["expected_return"]),
-                "Sharpe": f"{data['sharpe_ratio']:.2f}"
+                "Sharpe": f"{data['sharpe_ratio']:.2f}",
+                "Diversification": f"{data.get('diversification_score', 1.0):.2f}"
             })
         st.dataframe(pd.DataFrame(scen_summary), use_container_width=True)
 

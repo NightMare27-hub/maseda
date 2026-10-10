@@ -108,9 +108,12 @@ def coder(state):
     guidelines = load_guidelines()
     guidelines_section = f"\n\nENGINEERING STANDARDS (docs/agent_guidelines.md):\n{guidelines}" if guidelines else ""
 
+    import os
     planned_files = state.get("plan", {}).get("files", [])
-    # When generating 3+ files from scratch, activate sequential scaffolding to avoid token limits
-    if state["iteration"] == 0 and not prev and len(planned_files) >= 3:
+    # Only activate sequential scaffolding when creating 3+ brand-new files from scratch.
+    # Existing files must be patched in-place rather than overwritten from scratch templates.
+    new_files = [f for f in planned_files if not os.path.exists(os.path.join(state["repo_path"], f))]
+    if state["iteration"] == 0 and not prev and len(new_files) >= 3:
         from app.tools.scaffolder import synthesize_project_files
 
         scaffold_edits, meta = synthesize_project_files(

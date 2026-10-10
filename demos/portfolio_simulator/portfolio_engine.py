@@ -1,9 +1,3 @@
-"""
-Core financial logic engine for the Algorithmic Investment Portfolio and Retirement Simulator.
-Provides pure functions and data structures for compound growth, asset allocation metrics,
-Monte Carlo simulations, and rebalancing recommendations.
-"""
-
 import math
 import random
 from dataclasses import dataclass, field
