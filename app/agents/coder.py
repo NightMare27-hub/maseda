@@ -78,11 +78,16 @@ def _file_outline(code: str) -> str:
 
 def _context(state) -> str:
     repo, plan = state["repo_path"], state["plan"]
+    prev = state.get("edits", {})
     paths = list(dict.fromkeys(plan["files"] + [f for f in list_py_files(repo) if is_test_file(f)]))
     parts = []
     for rel in paths:
         try:
-            full_content = read_file(repo, rel)
+            if rel in prev and isinstance(prev[rel], str):
+                full_content = prev[rel]
+            else:
+                full_content = read_file(repo, rel)
+
             if len(full_content) > MAX_CHARS:
                 outline = _file_outline(full_content)
                 outline_hdr = f"[FILE OUTLINE - {len(full_content)} chars total]:\n{outline}\n\n" if outline else ""
@@ -167,10 +172,13 @@ def coder(state):
             continue
 
         old_content = ""
-        try:
-            old_content = read_file(state["repo_path"], rel)
-        except (FileNotFoundError, ValueError):
-            old_content = ""
+        if rel in prev and isinstance(prev[rel], str):
+            old_content = prev[rel]
+        else:
+            try:
+                old_content = read_file(state["repo_path"], rel)
+            except (FileNotFoundError, ValueError):
+                old_content = ""
 
         resolved_code, ok, msg = resolve_file_content(old_content, spec)
         if not ok:
