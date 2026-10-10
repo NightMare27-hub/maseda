@@ -170,3 +170,4 @@ Ensure 100% offline test coverage without requiring live API calls:
 - [ ] `tests/test_day5_experiments.py` passes 100% offline.
 - [ ] Full project test suite passes: `pytest -q` (all existing 37 tests + new Day 5 tests).
 - [ ] Documented in `docs/decisions.md` and `docs/ai_usage_log.md`.
+
