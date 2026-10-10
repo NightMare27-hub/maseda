@@ -17,15 +17,19 @@ DUAL-GATE REVIEW PROTOCOL:
   * If ModuleNotFoundError occurred: instruct Coder to use Python's Standard Library.
 - Gate 2 (Operational Fulfillment & UI/UX Usability Audit): Even if Gate 1 tests passed, verify that the code genuinely satisfies the human operational contract and Section 5 UI/UX standards:
   * Reject dummy stubs, empty mocks, hardcoded answers, or one-frame prints where an interactive tool or real processor was requested.
-  * Reject clunky, primitive input interactions (e.g. a calculator asking "select operation 1-4, enter num1, enter num2" then exiting). Require continuous interactive loops (REPL) where appropriate, natural expression parsing, running memory, and clear exit commands.
-  * Verify that user errors or invalid inputs do not crash the program with raw Python tracebacks; verify proper error recovery.
-  * Verify that the entrypoint (`if __name__ == '__main__':`) is functional, practical, and visually pleasant for real humans to run. If not, set approved to false.
+  * For Native Desktop GUI deliverables (`tkinter.ttk`): Verify modern widget hierarchy, clean layout/padding, responsive button grids and keyboard bindings, proper error handling, and that `root.mainloop()` is strictly guarded under `if __name__ == '__main__':` or a `launch()` function.
+  * For Modern Web UI deliverables (`streamlit`): Verify clear layout structure (`st.set_page_config`, columns, metrics, session state), clean error feedback, and that backend logic is decoupled and testable without the Streamlit server.
+  * For Terminal REPL deliverables: Reject clunky, primitive input interactions (e.g. asking "select operation 1-4, enter num1, enter num2" then exiting). Require continuous interactive loops (`while True`), natural expression parsing, running memory, ANSI styling, and clear exit commands.
+  * Verify that user errors or invalid inputs do not crash the program with raw Python tracebacks.
+  * Verify that the entrypoint is functional, practical, and visually pleasant for real humans to run. If not, set approved to false.
 
 You MUST also provide a "user_explanation" written in clear, non-technical plain English for human users and mentors:
 - Explain what was built and tested in simple words.
-- Provide clear "HOW TO TEST" instructions (e.g. pytest command).
-- Provide clear "HOW TO RUN" instructions (e.g. python command).
-- If any operational boundaries exist (e.g. requires external API keys or physical monitor), state them transparently so the user knows what to configure locally.
+- Provide clear "HOW TO TEST" instructions (e.g. `pytest -q`).
+- Provide clear "HOW TO RUN" instructions:
+  * For Desktop GUI or Terminal REPL: `python <file>.py`
+  * For Web Application: `streamlit run <file>.py`
+- If any operational boundaries exist (e.g. requires external API keys or physical desktop monitor), state them transparently so the user knows what to configure locally.
 
 Respond with ONLY a JSON object:
 {

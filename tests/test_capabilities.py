@@ -285,4 +285,146 @@ def test_workflow_error_boundary_graceful_recovery(tmp_path, monkeypatch):
     assert "MASEDA encountered a workflow execution issue" in res["user_explanation"]
 
 
+def test_guidelines_contain_dual_modern_ui_standards():
+    from app.tools.files import load_guidelines
+
+    guidelines = load_guidelines()
+    assert "Native Desktop GUI Standard (`tkinter.ttk`)" in guidelines
+    assert "Modern Web Application Standard (`streamlit`)" in guidelines
+    assert "Zero extra pip installs" in guidelines
+    assert "Operational Contract Selection Matrix" in guidelines
+
+
+def test_planner_incorporates_dual_modern_ui_operational_contract():
+    from app.agents.planner import SYSTEM
+
+    assert "Native Desktop GUI (`tkinter.ttk`)" in SYSTEM
+    assert "Modern Web UI (`streamlit`)" in SYSTEM
+    assert "Continuous Terminal REPL" in SYSTEM
+
+
+def test_reviewer_gate2_audits_tkinter_desktop_gui(tmp_path):
+    from app.agents.reviewer import reviewer
+
+    state = {
+        "run_id": "test_run_tk",
+        "task": "Create a modern desktop calculator with tkinter",
+        "repo_path": str(tmp_path),
+        "plan": {
+            "files": ["calculator_app.py", "test_calculator.py"],
+            "operational_contract": "Modern Tkinter Desktop GUI with themed ttk buttons and keyboard shortcuts",
+        },
+        "edits": {
+            "calculator_app.py": (
+                "import tkinter as tk\n"
+                "from tkinter import ttk\n\n"
+                "class CalculatorEngine:\n"
+                "    def evaluate(self, expr):\n"
+                "        return eval(expr)\n\n"
+                "class CalculatorGUI:\n"
+                "    def __init__(self, root):\n"
+                "        self.engine = CalculatorEngine()\n"
+                "        self.root = root\n\n"
+                "if __name__ == '__main__':\n"
+                "    root = tk.Tk()\n"
+                "    app = CalculatorGUI(root)\n"
+                "    root.mainloop()\n"
+            )
+        },
+        "tests_passed": True,
+        "test_output": "test_calculator.py::test_eval PASSED",
+        "iteration": 1,
+    }
+
+    with patch("app.agents.reviewer.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approved": True,
+                "summary": "Gate 1 & Gate 2 passed: Tkinter GUI implemented with clean decoupled logic",
+                "feedback": "Tkinter GUI adheres to Dual-Contract with mainloop guarded.",
+                "suggested_fixes": [],
+                "user_explanation": "Modern Tkinter desktop calculator built. Run with: python calculator_app.py",
+            },
+            {"tokens": 60, "cost": 0.0001, "seconds": 0.05},
+        )
+        res = reviewer(state)
+
+    assert res["review_approved"] is True
+    assert "python calculator_app.py" in res["user_explanation"]
+    system_prompt = mock_ask.call_args[0][0]
+    assert "Native Desktop GUI deliverables (`tkinter.ttk`)" in system_prompt
+
+
+def test_reviewer_gate2_audits_streamlit_web_ui(tmp_path):
+    from app.agents.reviewer import reviewer
+
+    state = {
+        "run_id": "test_run_st",
+        "task": "Build an interactive web calculator in streamlit",
+        "repo_path": str(tmp_path),
+        "plan": {
+            "files": ["web_calculator.py", "test_calculator.py"],
+            "operational_contract": "Modern Streamlit Web App with columns and session state",
+        },
+        "edits": {
+            "web_calculator.py": (
+                "import streamlit as st\n\n"
+                "def evaluate_expression(expr):\n"
+                "    return eval(expr)\n\n"
+                "st.set_page_config(page_title='Modern Calculator', layout='centered')\n"
+                "expr = st.text_input('Expression')\n"
+                "if st.button('Calculate'):\n"
+                "    st.metric('Result', evaluate_expression(expr))\n"
+            )
+        },
+        "tests_passed": True,
+        "test_output": "test_calculator.py::test_eval PASSED",
+        "iteration": 1,
+    }
+
+    with patch("app.agents.reviewer.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approved": True,
+                "summary": "Gate 1 & Gate 2 passed: Streamlit web app with metric cards and decoupled logic",
+                "feedback": "Streamlit app adheres to Dual-Contract.",
+                "suggested_fixes": [],
+                "user_explanation": "Modern Streamlit web calculator built. Run with: streamlit run web_calculator.py",
+            },
+            {"tokens": 60, "cost": 0.0001, "seconds": 0.05},
+        )
+        res = reviewer(state)
+
+    assert res["review_approved"] is True
+    assert "streamlit run web_calculator.py" in res["user_explanation"]
+    system_prompt = mock_ask.call_args[0][0]
+    assert "Modern Web UI deliverables (`streamlit`)" in system_prompt
+
+
+def test_dual_contract_headless_execution():
+    """Verify that pure backend logic can be tested programmatically without launching GUI or Web servers."""
+    class PureEngine:
+        def calculate(self, a: float, b: float, op: str) -> float:
+            if op == "+":
+                return a + b
+            elif op == "-":
+                return a - b
+            elif op == "*":
+                return a * b
+            elif op == "/":
+                if b == 0:
+                    raise ZeroDivisionError("Cannot divide by zero")
+                return a / b
+            raise ValueError(f"Unknown operator: {op}")
+
+    engine = PureEngine()
+    # Programmatic headless tests run instantly with zero GUI/browser overhead
+    assert engine.calculate(10, 5, "+") == 15
+    assert engine.calculate(10, 5, "-") == 5
+    assert engine.calculate(10, 5, "*") == 50
+    assert engine.calculate(10, 5, "/") == 2.0
+    with pytest.raises(ZeroDivisionError):
+        engine.calculate(10, 0, "/")
+
+
 

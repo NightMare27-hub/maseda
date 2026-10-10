@@ -1,20 +1,23 @@
 from app.llm import ask_json
 from app.logger import log
-from app.tools.files import is_test_file, list_py_files
+from app.tools.files import is_test_file, list_py_files, load_guidelines
 
 SYSTEM = """You are the Planner in a multi-agent software team.
 Given a coding task and the list of Python files in a repo, decide which files must be
 changed or created, the technical strategy, and the ordered steps to do it. Be minimal.
 
 You must define a Dual-Contract Architecture:
-1. logic_contract: Core algorithms, classes, and logic to be validated with automated pytest unit tests.
-2. operational_contract: How human users will run/interact with the software. Must provide a modern, polished UX (e.g. continuous REPL session, natural expression evaluation rather than clunky 1-4 numeric menus, clean ANSI colors, help/clear/exit commands, graceful error recovery without crashes, or a native Tkinter desktop GUI).
+1. logic_contract: Core algorithms, classes, and logic to be validated with automated pytest unit tests headlessly.
+2. operational_contract: How human users will run/interact with the software. Select the best modern UI paradigm:
+   - Native Desktop GUI (`tkinter.ttk`): Themed windowed desktop app with button grids, entry screens, keyboard shortcuts, zero extra pip installs.
+   - Modern Web UI (`streamlit`): Browser dashboard/app with containers, multi-column layouts, metrics, session state.
+   - Continuous Terminal REPL: Interactive console session with natural expression evaluation, running memory, colored ANSI headers, and help/quit commands.
 
 Respond with ONLY a JSON object:
 {
   "approach": "Clear 1-2 sentence description of technical strategy and assumptions",
   "logic_contract": "What backend methods/classes pytest will test programmatically",
-  "operational_contract": "Detailed human interaction design (continuous REPL, input syntax, help/quit commands, visual polish)",
+  "operational_contract": "Detailed human interaction design (Tkinter GUI, Streamlit Web app, or Terminal REPL)",
   "files": ["relative/path.py"],
   "steps": ["step 1", "step 2"]
 }
@@ -54,8 +57,11 @@ def planner(state):
             "and a plan step to write comprehensive pytest unit tests."
         )
 
+    guidelines = load_guidelines()
+    guidelines_section = f"\n\nENGINEERING STANDARDS (docs/agent_guidelines.md):\n{guidelines}" if guidelines else ""
+
     repo_files_str = "\n".join(files) if files else "(empty repository, no files yet)"
-    user = f"TASK:\n{state['task']}\n\nREPO FILES:\n{repo_files_str}{rag_context}{test_guidance}"
+    user = f"TASK:\n{state['task']}\n\nREPO FILES:\n{repo_files_str}{rag_context}{test_guidance}{guidelines_section}"
     from app.schemas import PlanSchema
 
     data, meta = ask_json(SYSTEM, user, schema_cls=PlanSchema)

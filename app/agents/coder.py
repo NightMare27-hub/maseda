@@ -10,8 +10,12 @@ If test output or reviewer feedback from a previous attempt is shown, fix the ca
 Prefer Python's Standard Library (e.g. urllib, math, json, dataclasses) to avoid uninstalled dependencies.
 
 DUAL-CONTRACT ARCHITECTURE:
-1. Logic Layer (for pytest): Classes and functions must be modular, pure, and testable programmatically without requiring human input or a graphical screen.
-2. Operational Layer (for human users): If the task or plan calls for a playable game, CLI utility, or script, provide a fully functional, cross-platform runnable experience in `if __name__ == '__main__':` (e.g., using standard input() loops or cross-platform console controls). Do NOT write a dummy stub or single-frame print—ensure humans can actually run and use the program!
+1. Logic Layer (for pytest): Classes and functions must be modular, pure, and testable programmatically without requiring human input, a display server, or a browser. Automated pytest runs in a headless sandbox.
+2. Operational Layer (for human users): Provide a fully functional, cross-platform runnable experience matching the operational contract:
+   - Modern Desktop GUI (`tkinter.ttk`): Build polished, themed desktop interfaces using Python's standard library `tkinter` and `tkinter.ttk`. Include styled display screens, responsive button grids, and keyboard bindings. Keep `root.mainloop()` strictly inside `if __name__ == '__main__':` or a `launch()` function so it never blocks automated tests.
+   - Modern Web UI (`streamlit`): Use `st.set_page_config`, card containers (`st.container(border=True)`), multi-column layouts (`st.columns`), metrics (`st.metric`), and `st.session_state`. Decouple backend algorithms into testable functions/classes.
+   - Continuous Terminal REPL: Continuous input loop (`while True`), natural expression evaluation, running memory (`ans`), ANSI colored highlights, and help/quit commands.
+   Do NOT write dummy stubs or single-frame prints—ensure humans can actually run and interact with the application!
 3. Network/Offline: The sandbox has no internet access; mock network calls in tests if applicable.
 
 EDITING MODES:

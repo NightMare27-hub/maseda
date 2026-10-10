@@ -87,9 +87,36 @@ Deliverables must feel like polished, modern software rather than primitive home
 * Never let user typos or bad math (e.g. division by zero, mismatched parentheses, unknown variables) crash the program with a raw Python stack trace.
 * Catch exceptions gracefully, display a user-friendly colored error message (e.g. `Error: Division by zero`), and continue the interactive session seamlessly.
 
-### E. Native Graphical UI Option (`tkinter`)
-* When the user requests a graphical desktop app, visual calculator, or windowed dashboard:
-  * Use Python's built-in `tkinter` module (Standard Library, cross-platform, 0 pip dependencies).
-  * Concur with Dual-Contract: Core backend logic classes are pure and tested headlessly with pytest; `tkinter` handles the window, button grids, and display under `if __name__ == '__main__':`.
+### E. Native Desktop GUI Standard (`tkinter.ttk`)
+* **When to Use**: Desktop utilities, native windowed calculators, interactive dashboards, or when the user requests a "GUI", "desktop app", or "window".
+* **Technology**: Built-in Python Standard Library `tkinter` and `tkinter.ttk` (Zero extra pip installs, cross-platform).
+* **Architecture & Separation**:
+  * **Core Backend Logic**: Pure classes/functions (`Calculator`, `TaskManager`, etc.) completely decoupled from GUI code, enabling 100% headless automated verification with `pytest`.
+  * **Presentation Layer**: GUI classes or functions using `tkinter.ttk` widgets (themed buttons, entries, labels, frames).
+  * **Mainloop Guard**: Blocking GUI loops (`root.mainloop()`) MUST ONLY execute under `if __name__ == '__main__':` or inside a dedicated `launch()` function. Tests must NEVER trigger `root.mainloop()`.
+* **Visual Polish & Styling**:
+  * Use `ttk.Style` with modern themes (`clam`, `alt`, or native OS) for polished, non-dated controls.
+  * Generous padding (`padx=5, pady=5`), consistent font hierarchies, and responsive grid layouts (`columnconfigure`, `rowconfigure`).
+  * Display screens: Bold, right-aligned monospace font for outputs, history labels, and error messages.
+  * Full Keyboard Support: Bind keyboard shortcuts (`<Return>`, `<Escape>`, `<BackSpace>`, standard operators) alongside clickable mouse buttons.
+
+### F. Modern Web Application Standard (`streamlit`)
+* **When to Use**: Web apps, browser dashboards, analytical tools, or when the user requests a "web app", "browser UI", or "streamlit".
+* **Technology**: `streamlit` (standard in MASEDA stack and requirements.txt).
+* **Architecture & Separation**:
+  * **Core Backend Logic**: Pure computational and data functions in a standalone module (or cleanly separated within the file), fully testable with `pytest` without invoking Streamlit runtime.
+  * **Presentation Layer**: Streamlit page layout driven by `st.*` components.
+* **Visual Polish & Layout Standards**:
+  * Call `st.set_page_config(page_title="...", page_icon="...", layout="centered")` at the very top.
+  * Modern card containers using `with st.container(border=True):` to group related controls.
+  * Responsive multi-column button grids: `cols = st.columns(4)` for compact, ergonomic layouts.
+  * Visual metrics: `st.metric(label="Current Value", value=...)` for high-impact visual feedback.
+  * State management: Use `st.session_state` to store calculation history, variables, and themes across user interactions.
+  * Collapsible sections: Use `with st.expander("History & Details"):` for secondary information.
+  * Run Command: Launched via `streamlit run <file>.py`.
+
+### G. Operational Contract Selection Matrix
+* **Explicit Request**: If the user explicitly asks for "GUI / desktop", produce `tkinter.ttk`. If they ask for "web / streamlit", produce `streamlit`. If they ask for "CLI / terminal", produce an interactive REPL.
+* **General Request** (e.g. "build a calculator application", "create a note manager"): Default to either a Modern Tkinter Desktop GUI or Streamlit Web App, while always maintaining the pure backend logic layer tested with `pytest`. Include explicit instructions in the Reviewer user explanation on how to run the GUI/web app.
 
 
