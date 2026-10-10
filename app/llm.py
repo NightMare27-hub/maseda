@@ -1,8 +1,11 @@
 """Single entry point for all model calls. Provider and model come from the MODEL env var."""
+from __future__ import annotations
+
 import json
 import os
 import re
 import time
+from typing import Any, Optional
 
 from dotenv import load_dotenv
 
