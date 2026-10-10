@@ -218,3 +218,71 @@ def test_reviewer_gate2_ui_ux_audit(tmp_path):
     assert "clunky, primitive input interactions" in system_prompt
 
 
+def test_schema_validation_plan_and_reviewer():
+    from app.schemas import PlanSchema, ReviewerSchema, validate_schema
+
+    # Valid plan
+    plan_data = {
+        "approach": "Build REPL",
+        "logic_contract": "evaluate()",
+        "operational_contract": "calc> REPL",
+        "files": ["calc.py"],
+        "steps": ["step 1"],
+    }
+    validated_plan, err = validate_schema(plan_data, PlanSchema)
+    assert err is None
+    assert validated_plan["approach"] == "Build REPL"
+
+    # Reviewer with missing optional fields gets defaults
+    rev_data = {"approved": True}
+    validated_rev, err = validate_schema(rev_data, ReviewerSchema)
+    assert err is None
+    assert validated_rev["approved"] is True
+    assert validated_rev["suggested_fixes"] == []
+
+
+def test_reflective_self_correction_in_ask_json(monkeypatch):
+    from app import llm
+
+    # Simulate attempt 1 returning broken text, and attempt 2 returning valid self-corrected JSON
+    attempt = 0
+
+    def mock_complete(system, user, json_mode=False):
+        nonlocal attempt
+        attempt += 1
+        if attempt == 1:
+            return "This is not valid json at all", {"tokens": 20, "cost": 0.0001, "seconds": 0.05}
+        else:
+            assert "CRITICAL: Your previous response could not be validated" in user
+            return '{"status": "self_corrected"}', {"tokens": 30, "cost": 0.0001, "seconds": 0.05}
+
+    monkeypatch.setattr(llm, "_complete", mock_complete)
+
+    data, meta = llm.ask_json("system", "give me json")
+    assert data["status"] == "self_corrected"
+    assert meta["attempts"] == 2
+
+
+def test_workflow_error_boundary_graceful_recovery(tmp_path, monkeypatch):
+    from app import graph
+
+    p = tmp_path / "mod.py"
+    p.write_text("def x(): pass\n", encoding="utf-8")
+
+    # Force an unhandled exception inside the graph stream
+    def mock_build_graph():
+        class MockGraph:
+            def stream(self, state):
+                raise RuntimeError("Simulated unexpected graph failure")
+        return MockGraph()
+
+    monkeypatch.setattr(graph, "build_graph", mock_build_graph)
+
+    # run_task should catch the exception gracefully without crashing
+    res = graph.run_task("test task", str(tmp_path), verbose=False)
+    assert res["status"] == "failed"
+    assert "Simulated unexpected graph failure" in res["error"]
+    assert "MASEDA encountered a workflow execution issue" in res["user_explanation"]
+
+
+

@@ -56,7 +56,9 @@ def planner(state):
 
     repo_files_str = "\n".join(files) if files else "(empty repository, no files yet)"
     user = f"TASK:\n{state['task']}\n\nREPO FILES:\n{repo_files_str}{rag_context}{test_guidance}"
-    data, meta = ask_json(SYSTEM, user)
+    from app.schemas import PlanSchema
+
+    data, meta = ask_json(SYSTEM, user, schema_cls=PlanSchema)
     approach = str(data.get("approach", "")).strip()
     logic_contract = str(data.get("logic_contract", "")).strip()
     operational_contract = str(data.get("operational_contract", "")).strip()

@@ -59,7 +59,9 @@ def reviewer(state):
         f"{guidelines_section}"
     )
 
-    data, meta = ask_json(SYSTEM, user)
+    from app.schemas import ReviewerSchema
+
+    data, meta = ask_json(SYSTEM, user, schema_cls=ReviewerSchema)
     approved = bool(data.get("approved", False))
     # If tests didn't pass, review cannot be approved
     if not tests_passed:

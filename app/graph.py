@@ -76,11 +76,19 @@ def run_task(
 
     final = dict(initial_state)
     g = build_graph()
-    for chunk in g.stream(initial_state):
-        for node_name, node_update in chunk.items():
-            final.update(node_update)
-            if verbose:
-                _report_progress(node_name, node_update)
+    try:
+        for chunk in g.stream(initial_state):
+            for node_name, node_update in chunk.items():
+                final.update(node_update)
+                if verbose:
+                    _report_progress(node_name, node_update)
+    except Exception as e:
+        error_msg = str(e)
+        final["status"] = "failed"
+        final["error"] = error_msg
+        final["user_explanation"] = f"MASEDA encountered a workflow execution issue: {error_msg}"
+        if verbose:
+            print(f"\n[!] System Resilience Error Boundary caught an error: {error_msg}")
 
     final["diff"] = make_diff(repo_path, final.get("edits", {}))
     log(
