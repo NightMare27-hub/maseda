@@ -24,6 +24,7 @@
 | 2026-10-10 | Extended 90s LLM timeout for large code generation | Complex files with hundreds of lines take 30-50s to stream; a 30s timeout triggered premature failover cascades across healthy models. | 30s timeout causing false failovers, or infinite timeout blocking indefinitely. |
 | 2026-10-10 | Surgical Block Patching Engine (`app/tools/patching.py`) | Allows Coder to output targeted search-and-replace blocks for existing modules, cutting token burn by 70% and preventing accidental code omission on 500+ line files while retaining difflib safety. | Forcing full file rewrites on every minor edit, causing high latency, timeouts, and deleted functions. |
 | 2026-10-10 | Multi-File Incremental Scaffolding & Interface Propagation | When plans touch 3+ files, scaffolder orders files topologically (constants/models -> services -> CLI -> tests) and synthesizes files sequentially, passing AST exports to prevent interface hallucination and token limits. | Single-turn monolithic generation hitting the 4,000-token LLM output ceiling and truncating code. |
+| 2026-10-10 | Human-Centered UI/UX Standards (Section 5) in Guidelines & Reviewer Gate 2 | Codified standards requiring continuous REPL sessions, natural expression parsing (anti-clunky 1-4 menus), ANSI colors, and graceful error recovery; Reviewer Gate 2 explicitly audits and rejects single-shot clunky scripts. | Accepting primitive homework-style prompts that ask 2 numbers, print once, and terminate. |
 
 
 

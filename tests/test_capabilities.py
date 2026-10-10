@@ -177,3 +177,44 @@ def test_scaffolder_synthesizes_project_files_mock(tmp_path, monkeypatch):
     assert "from models.user import User" in edits["services/auth.py"]
     assert meta["tokens"] > 0
 
+
+def test_reviewer_gate2_ui_ux_audit(tmp_path):
+    from app.agents.reviewer import reviewer
+
+    state = {
+        "task": "build an interactive calculator",
+        "plan": {"files": ["calc.py", "test_calc.py"]},
+        "edits": {
+            "calc.py": (
+                "def main():\n"
+                "    op = input('Select: 1. Add, 2. Sub: ')\n"
+                "    a = float(input('Num 1: '))\n"
+                "    b = float(input('Num 2: '))\n"
+                "    print(a + b)\n"
+            )
+        },
+        "repo_path": str(tmp_path),
+        "run_id": "test_ui_audit",
+        "tests_passed": True,  # Gate 1 passes
+        "test_output": "1 passed in 0.01s",
+    }
+
+    with patch("app.agents.reviewer.ask_json") as mock_ask:
+        mock_ask.return_value = (
+            {
+                "approved": False,
+                "summary": "Gate 2 UI/UX failure: clunky single-shot interaction",
+                "feedback": "Calculator uses a clunky numeric menu and terminates after one operation. Provide a continuous REPL with natural expression parsing.",
+                "suggested_fixes": ["implement continuous REPL loop", "support natural expressions like 2 + 3 * 4"],
+                "user_explanation": "The calculator only does one calculation and quits. It needs to stay open in a continuous loop.",
+            },
+            {"tokens": 50, "cost": 0.0001, "seconds": 0.05},
+        )
+        res = reviewer(state)
+
+    assert res["review_approved"] is False
+    system_prompt = mock_ask.call_args[0][0]
+    assert "Section 5 UI/UX standards" in system_prompt
+    assert "clunky, primitive input interactions" in system_prompt
+
+

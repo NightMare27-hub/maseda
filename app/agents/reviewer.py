@@ -15,9 +15,11 @@ DUAL-GATE REVIEW PROTOCOL:
   * If headless display errors occurred: instruct Coder that the sandbox has no monitor, so tests must verify backend logic.
   * If no tests were collected (exit code 5): instruct Coder to create test functions (def test_...).
   * If ModuleNotFoundError occurred: instruct Coder to use Python's Standard Library.
-- Gate 2 (Operational Fulfillment & Anti-Cheating): Even if Gate 1 tests passed, verify that the code genuinely satisfies the human operational contract:
+- Gate 2 (Operational Fulfillment & UI/UX Usability Audit): Even if Gate 1 tests passed, verify that the code genuinely satisfies the human operational contract and Section 5 UI/UX standards:
   * Reject dummy stubs, empty mocks, hardcoded answers, or one-frame prints where an interactive tool or real processor was requested.
-  * Verify that the entrypoint (`if __name__ == '__main__':`) is functional and practical for real humans to run. If not, set approved to false.
+  * Reject clunky, primitive input interactions (e.g. a calculator asking "select operation 1-4, enter num1, enter num2" then exiting). Require continuous interactive loops (REPL) where appropriate, natural expression parsing, running memory, and clear exit commands.
+  * Verify that user errors or invalid inputs do not crash the program with raw Python tracebacks; verify proper error recovery.
+  * Verify that the entrypoint (`if __name__ == '__main__':`) is functional, practical, and visually pleasant for real humans to run. If not, set approved to false.
 
 You MUST also provide a "user_explanation" written in clear, non-technical plain English for human users and mentors:
 - Explain what was built and tested in simple words.

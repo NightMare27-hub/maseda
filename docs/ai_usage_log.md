@@ -19,6 +19,7 @@
 | 2026-10-10 | Antigravity | Dissertation Project Chronicle Formulation | Authored comprehensive `docs/dissertation_project_chronicle.md` capturing Day 1 to Day 4 technical retrospective, guardrails, technology matrix, and chapter mapping for the 40-60 page thesis. |
 | 2026-10-10 | Antigravity | Capability Upgrade Plan Formulation | Authored `docs/capability_upgrade_plan.md` detailing Multi-File Incremental Scaffolding (Capability 2) and Surgical Block Patching (Capability 3). |
 | 2026-10-10 | Antigravity | Surgical Patching & Scaffolding Implementation | Implemented `app/tools/patching.py` (whitespace-tolerant block replacement), updated `app/tools/files.py` and `app/agents/coder.py` to resolve patch objects, implemented `app/tools/scaffolder.py` (topological dependency ordering and sequential synthesis with AST interface memory), added 8 unit tests in `tests/test_capabilities.py` (all 45 tests passing offline). |
+| 2026-10-10 | Antigravity | UI/UX & Human-Centered Interaction Standards | Added Section 5 to `docs/agent_guidelines.md` mandating continuous REPL loops, natural expression parsing (anti-clunky 1-4 menus), ANSI colors, and graceful error handling; updated Planner and Reviewer Gate 2 to audit and enforce modern UI/UX quality (46 tests passing offline). |
 
 
 

@@ -8,13 +8,13 @@ changed or created, the technical strategy, and the ordered steps to do it. Be m
 
 You must define a Dual-Contract Architecture:
 1. logic_contract: Core algorithms, classes, and logic to be validated with automated pytest unit tests.
-2. operational_contract: How human users will run/interact with the software (e.g. interactive CLI loop, command arguments, importable module).
+2. operational_contract: How human users will run/interact with the software. Must provide a modern, polished UX (e.g. continuous REPL session, natural expression evaluation rather than clunky 1-4 numeric menus, clean ANSI colors, help/clear/exit commands, graceful error recovery without crashes, or a native Tkinter desktop GUI).
 
 Respond with ONLY a JSON object:
 {
   "approach": "Clear 1-2 sentence description of technical strategy and assumptions",
   "logic_contract": "What backend methods/classes pytest will test programmatically",
-  "operational_contract": "How human users will run and interact with the entrypoint",
+  "operational_contract": "Detailed human interaction design (continuous REPL, input syntax, help/quit commands, visual polish)",
   "files": ["relative/path.py"],
   "steps": ["step 1", "step 2"]
 }
