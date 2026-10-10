@@ -1,5 +1,7 @@
 import random
 import time
+import sys
+import os
 from enum import Enum
 from typing import Any, List, Optional, Tuple
 
@@ -7,6 +9,14 @@ try:
     import curses
 except ImportError:
     curses = None  # type: ignore
+
+if sys.platform == "win32":
+    try:
+        import msvcrt
+    except ImportError:
+        msvcrt = None
+else:
+    msvcrt = None
 
 
 class Direction(Enum):
@@ -202,7 +212,80 @@ def run_curses(stdscr: Any) -> None:
     stdscr.getch()
 
 
+def run_msvcrt() -> None:
+    """Run an interactive session using Windows msvcrt without curses."""
+    game = SnakeGame(width=20, height=20)
+    
+    # Clear screen and hide cursor (ANSI escape sequence)
+    print("\033[2J\033[H\033[?25l", end="")
+    
+    try:
+        last_tick = time.time()
+        tick_interval = 0.12
+
+        while not game.game_over:
+            # Non-blocking key check
+            if msvcrt and msvcrt.kbhit():
+                ch = msvcrt.getch()
+                if ch in (b'\x00', b'\xe0'):  # Special key prefix on Windows
+                    ch2 = msvcrt.getch()
+                    if ch2 == b'H':  # Up arrow
+                        game.change_direction(Direction.UP)
+                    elif ch2 == b'P':  # Down arrow
+                        game.change_direction(Direction.DOWN)
+                    elif ch2 == b'K':  # Left arrow
+                        game.change_direction(Direction.LEFT)
+                    elif ch2 == b'M':  # Right arrow
+                        game.change_direction(Direction.RIGHT)
+                else:
+                    try:
+                        char_str = ch.decode('utf-8').lower()
+                    except Exception:
+                        char_str = ""
+                    
+                    if char_str == 'q':
+                        break
+                    elif char_str == 'w':
+                        game.change_direction(Direction.UP)
+                    elif char_str == 's':
+                        game.change_direction(Direction.DOWN)
+                    elif char_str == 'a':
+                        game.change_direction(Direction.LEFT)
+                    elif char_str == 'd':
+                        game.change_direction(Direction.RIGHT)
+
+            now = time.time()
+            if now - last_tick >= tick_interval:
+                game.step()
+                last_tick = now
+
+            # Move cursor to top-left and redraw
+            output = f"\033[HScore: {game.score} | Use WASD or Arrows, 'q' to quit\n" + game.render_ascii() + "\n"
+            sys.stdout.write(output)
+            sys.stdout.flush()
+
+            time.sleep(0.01)
+
+    finally:
+        # Restore cursor
+        sys.stdout.write("\033[?25h")
+        sys.stdout.flush()
+
+    print()
+    if game.won:
+        print(f"Congratulations! You won with score: {game.score}!")
+    else:
+        print(f"Game Over! Final Score: {game.score}")
+
+
 def main() -> None:
+    if sys.platform == "win32" and msvcrt is not None:
+        try:
+            run_msvcrt()
+            return
+        except Exception as e:
+            print(f"Could not start Windows msvcrt interface: {e}")
+
     if curses is not None:
         try:
             curses.wrapper(run_curses)
@@ -210,7 +293,7 @@ def main() -> None:
         except Exception as e:
             print(f"Could not start curses interface: {e}")
     else:
-        print("Curses is not installed on this system.")
+        print("Curses and msvcrt not available or usable.")
 
     print("Running headless demonstration:")
     game = SnakeGame(width=10, height=10)
