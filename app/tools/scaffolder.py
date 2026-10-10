@@ -30,11 +30,11 @@ def get_file_tier(file_path: str) -> int:
         return 3
 
     # Tier 4: Services, business logic, engines, storage, pipelines
-    if any(k in name for k in ("service", "engine", "store", "db", "manager", "pipeline", "process", "repo")):
+    if any(k in name for k in ("service", "engine", "store", "db", "manager", "pipeline", "process", "repo", "core", "logic", "calc")):
         return 4
 
-    # Tier 5: CLI, API, UI, controllers, main entrypoints
-    if any(k in name for k in ("main", "cli", "app", "api", "controller", "run", "entry")):
+    # Tier 5: CLI, API, UI, GUI, presentation, controllers, main entrypoints
+    if any(k in name for k in ("main", "cli", "app", "api", "controller", "run", "entry", "ui", "gui", "view", "window", "frontend", "page", "widget", "screen")):
         return 5
 
     return 3  # Default middle tier

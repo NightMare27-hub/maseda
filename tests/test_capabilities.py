@@ -92,6 +92,11 @@ def test_file_tier_and_topological_sort():
     assert sorted_files[3] == "app/controllers/cli.py"
     assert sorted_files[4] == "tests/test_store.py"
 
+    # UI/GUI files (Tier 5) must sort after engine/logic (Tier 4) and before tests (Tier 6)
+    ui_files = ["calculator_gui.py", "calculator_engine.py", "test_calculator.py"]
+    sorted_ui = sort_files_by_dependency(ui_files)
+    assert sorted_ui == ["calculator_engine.py", "calculator_gui.py", "test_calculator.py"]
+
 
 def test_extract_file_interfaces():
     code = (
