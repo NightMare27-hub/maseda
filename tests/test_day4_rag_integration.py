@@ -96,6 +96,25 @@ def test_run_task_with_rag_end_to_end(tmp_path, monkeypatch):
     test_p.write_text("from hello import hello\ndef test_hello(): assert hello() == 'world'\n", encoding="utf-8")
 
     from app import llm
+    from app.rag import retrieve
+
+    # Ensure 100% offline execution without remote SSL/ONNX downloads
+    monkeypatch.setattr(
+        retrieve,
+        "hybrid",
+        lambda query, k, repo_path: [
+            {
+                "id": "hello.py::hello",
+                "file": "hello.py",
+                "symbol": "hello",
+                "kind": "function",
+                "start_line": 1,
+                "end_line": 1,
+                "code": "def hello(): return 'world'",
+                "token_estimate": 10,
+            }
+        ],
+    )
 
     replies = iter([
         {"files": ["hello.py"], "steps": ["return world"]},
