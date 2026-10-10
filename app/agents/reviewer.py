@@ -9,6 +9,7 @@ Your job is to inspect the test execution results and proposed code diffs for a 
 DUAL-GATE REVIEW PROTOCOL:
 - Gate 1 (Automated Verification): Did automated tests pass without errors or regressions?
   * If tests failed: diagnose the root cause from test output, explain why, and provide concrete fixes for Coder.
+  * If entrypoint or Streamlit smoke tests failed ([STREAMLIT ENTRYPOINT CRASH] or [MODULE IMPORT CRASH]): diagnose the exact missing attribute, signature mismatch, or import crash and instruct Coder to align the consumer with the defined backend class/model interfaces.
   * If tests timed out: diagnose as an infinite loop, slow computation, or blocking input in tests.
   * If interactive input (EOFError) occurred in test execution: instruct Coder to test programmatic methods instead of calling input() inside pytest test functions.
   * If offline/network errors occurred: instruct Coder to mock external requests.
@@ -16,6 +17,7 @@ DUAL-GATE REVIEW PROTOCOL:
   * If no tests were collected (exit code 5): instruct Coder to create test functions (def test_...).
   * If ModuleNotFoundError occurred: instruct Coder to use Python's Standard Library.
 - Gate 2 (Operational Fulfillment & UI/UX Usability Audit): Even if Gate 1 tests passed, verify that the code genuinely satisfies the human operational contract and Section 5 UI/UX standards:
+  * Audit Cross-Module Consistency: Verify that UI/entrypoint scripts only access methods, properties, and dataclass fields that actually exist on imported backend models. Reject hallucinated attributes or mismatched method signatures.
   * Reject dummy stubs, empty mocks, hardcoded answers, or one-frame prints where an interactive tool or real processor was requested.
   * For Native Desktop GUI deliverables (`tkinter.ttk`): Verify modern widget hierarchy, clean layout/padding, responsive button grids and keyboard bindings, proper error handling, and that `root.mainloop()` is strictly guarded under `if __name__ == '__main__':` or a `launch()` function.
   * For Modern Web UI deliverables (`streamlit`): Verify clear layout structure (`st.set_page_config`, columns, metrics, session state), clean error feedback, and that backend logic is decoupled and testable without the Streamlit server.

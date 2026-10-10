@@ -439,4 +439,69 @@ def test_dual_contract_headless_execution():
         engine.calculate(10, 0, "/")
 
 
+def test_streamlit_smoke_test_catches_attribute_error(tmp_path):
+    from app.tools.sandbox import run_entrypoint_smoke_tests, run_tests
+
+    # 1. Backend engine with dataclass
+    (tmp_path / "engine.py").write_text(
+        "from dataclasses import dataclass\n"
+        "@dataclass\n"
+        "class Model:\n"
+        "    score: float\n",
+        encoding="utf-8",
+    )
+    # 2. Pytest that passes because it only tests engine.py
+    (tmp_path / "test_engine.py").write_text(
+        "from engine import Model\n"
+        "def test_model():\n"
+        "    assert Model(score=0.9).score == 0.9\n",
+        encoding="utf-8",
+    )
+    # 3. Streamlit app that has an AttributeError bug (accesses non-existent field)
+    (tmp_path / "app.py").write_text(
+        "import streamlit as st\n"
+        "from engine import Model\n"
+        "m = Model(score=0.9)\n"
+        "st.metric('Score', m.hallucinated_score)\n",
+        encoding="utf-8",
+    )
+
+    # Direct smoke test check
+    passed, out = run_entrypoint_smoke_tests(str(tmp_path))
+    assert passed is False
+    assert "[STREAMLIT ENTRYPOINT CRASH in app.py]" in out
+    assert "AttributeError" in out
+    assert "hallucinated_score" in out
+
+    # Full sandbox run_tests check: pytest would pass, but smoke test must fail Gate 1
+    passed_all, out_all = run_tests(str(tmp_path), {})
+    assert passed_all is False
+    assert "[STREAMLIT ENTRYPOINT CRASH in app.py]" in out_all
+
+
+def test_streamlit_smoke_test_passes_on_valid_app(tmp_path):
+    from app.tools.sandbox import run_entrypoint_smoke_tests
+
+    (tmp_path / "engine.py").write_text(
+        "from dataclasses import dataclass\n"
+        "@dataclass\n"
+        "class Model:\n"
+        "    score: float\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "app.py").write_text(
+        "import streamlit as st\n"
+        "from engine import Model\n"
+        "st.title('Health Check')\n"
+        "m = Model(score=0.9)\n"
+        "st.metric('Score', m.score)\n",
+        encoding="utf-8",
+    )
+
+    passed, out = run_entrypoint_smoke_tests(str(tmp_path))
+    assert passed is True
+    assert out == ""
+
+
+
 
