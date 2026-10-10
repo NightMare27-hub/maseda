@@ -396,3 +396,4 @@ This chronicle maps directly to the required chapters of the final academic diss
 * **Chapter 4: Implementation & Engineering Resilience (10–14 pages)**: Day 1–4 engineering chronicle, 24 decision logs, AST chunking implementation, model cascade, and sandbox diagnostics.
 * **Chapter 5: Empirical Benchmark & Results (10–12 pages)**: Day 5 comparative study (No-RAG vs Dense vs Hybrid), LaTeX tables, performance plots, and Failure Taxonomy.
 * **Chapter 6: Discussion, Threats to Validity & Future Work (6–8 pages)**: Limitations identified in "What More Could Have Been Done", single-language constraints, and Policy-RAG roadmaps.
+
