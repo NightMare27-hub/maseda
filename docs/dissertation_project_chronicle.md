@@ -395,5 +395,76 @@ This chronicle maps directly to the required chapters of the final academic diss
 * **Chapter 3: System Design & Architecture (10–12 pages)**: Section 2 (Days 1–4 architecture), Section 4 (Agent roster and guardrails), Section 3 (Technology matrix).
 * **Chapter 4: Implementation & Engineering Resilience (10–14 pages)**: Day 1–4 engineering chronicle, 24 decision logs, AST chunking implementation, model cascade, and sandbox diagnostics.
 * **Chapter 5: Empirical Benchmark & Results (10–12 pages)**: Day 5 comparative study (No-RAG vs Dense vs Hybrid), LaTeX tables, performance plots, and Failure Taxonomy.
-* **Chapter 6: Discussion, Threats to Validity & Future Work (6–8 pages)**: Limitations identified in "What More Could Have Been Done", single-language constraints, and Policy-RAG roadmaps.
+* **Chapter 6: Discussion, Threats to Validity & Future Work (6–8 pages)**: Limitations identified in Section 8, single-language constraints, and Policy-RAG roadmaps.
+
+---
+
+## 7. Advanced Capabilities Evolution (Days 5 to Present)
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                              ADVANCED CAPABILITY MILESTONES                            │
+├─────────────────────┬──────────────────────┬────────────────────┬──────────────────────┤
+│  SURGICAL PATCHING  │ TOPOLOGICAL SCAFFOLD │  DUAL MODERN UI    │  ENTRYPOINT SMOKE    │
+│  Targeted Search-   │ Sequential AST multi-│ Desktop Tkinter +  │ Headless Streamlit   │
+│  Replace Diff Engine│ file dependency build│ Streamlit Web Apps │ AppTest Verification │
+└─────────────────────┴──────────────────────┴────────────────────┴──────────────────────┘
+```
+
+### 7.1 What We Planned vs What We Built
+1. **Surgical Block Patching Engine (`app/tools/patching.py`)**:
+   - *Problem*: Full-file rewrites burned 10,000+ tokens per edit on 300+ line files and occasionally dropped existing functions.
+   - *Solution*: Whitespace-tolerant search-and-replace block patcher allowing Coder to emit small diff blocks.
+2. **Topological Multi-File Scaffolding (`app/tools/scaffolder.py`)**:
+   - *Problem*: Generating 3+ files in a single prompt hit the 4,000-token LLM output ceiling and hallucinated cross-file signatures.
+   - *Solution*: Dependency tier sorting (models -> engines -> presentation -> tests) with sequential AST interface propagation.
+3. **Dual Modern UI Architecture (Desktop & Web)**:
+   - *Problem*: Agent only built basic terminal REPLs or primitive 1-4 input scripts.
+   - *Solution*: Expanded guidelines and Reviewer Gate 2 to audit native desktop GUIs (`tkinter.ttk`) and modern browser apps (`streamlit`), enforcing pure logic decoupling so unit tests run 100% headlessly in the sandbox.
+4. **Headless Entrypoint Smoke Testing (`app/tools/sandbox.py`)**:
+   - *Problem*: Pytest only tested backend engines; UI entrypoints (`app.py`) were never imported or run, allowing runtime `AttributeError` to slip into production.
+   - *Solution*: Built automated headless Streamlit smoke testing via official `streamlit.testing.v1.AppTest`, failing Gate 1 immediately upon runtime UI crashes.
+5. **Interactive MASEDA Dashboard (`app/ui/streamlit_app.py`)**:
+   - Built a complete web interface for MASEDA with target repo selection, RAG configuration, live plan inspection, diff viewer, and one-click disk patching.
+
+### 7.2 Critical Errors Faced & Exact Fixes
+
+| Error / Challenge Encountered | Root Cause | Exact Engineering Fix |
+|---|---|---|
+| **Streamlit Entrypoint Crash**: `AttributeError: 'PortfolioMetrics' object has no attribute 'diversification_score'` | 1) Scaffolder AST extractor ignored dataclass type annotations (`AnnAssign`), so Coder hallucinated missing fields.<br>2) Sandbox only ran pytest, which never imported `app.py`. | 1) Upgraded `extract_file_interfaces()` in `scaffolder.py` to extract `AnnAssign` dataclass fields and return types.<br>2) Added `run_entrypoint_smoke_tests()` in `sandbox.py` using headless `streamlit.testing.v1.AppTest`. |
+| **Whack-A-Mole Test Iteration Trap**: Agent failed after 3 rounds on mismatched assertion scales (`100.0` vs `1.0`). | Pytest ran with `-x` (exit on first error), hiding all other failures and forcing the agent to burn 1 iteration per assertion error. | Replaced `-x` with `--maxfail=10` in `sandbox.py` so pytest reports all failures across the test suite simultaneously in Round 1. |
+| **Accidental Overwrite of Existing Repositories**: Agent regenerated whole projects from scratch instead of patching them. | Scaffolding trigger fired whenever `len(planned_files) >= 3`, even when all files already existed on disk. | Added `new_files` existence check in `coder.py`: only scaffold when files are brand new; existing repos are surgically patched in-place. |
+| **Windows Home Directory Crash**: `RuntimeError: Could not determine home directory` in Streamlit AppTest. | Minimal sandbox `_KEEP_ENV` only retained `HOME`, which does not exist on Windows. | Added `USERPROFILE`, `HOMEDRIVE`, and `HOMEPATH` to `_KEEP_ENV` in `sandbox.py`. |
+| **Path Doubling in Nested Smoke Tests**: `AppTest script not found at .../demos/portfolio_simulator/demos/portfolio_simulator/app.py`. | Relative path passed to `AppTest.from_file()` was resolved against `cwd` twice. | Converted paths to canonical `os.path.abspath(full_path)` before passing to `AppTest`. |
+
+---
+
+## 8. Comprehensive Current Limitations of MASEDA
+
+For academic integrity and thesis defense, the current boundaries and limitations of MASEDA are formally documented:
+
+### 1. Python-Only Language Scope
+* **Limitation**: MASEDA currently parses, chunks, and tests Python repositories exclusively (`.py` files).
+* **Rationale**: Python provides native Standard Library AST parsing (`ast` module) and reflection. Supporting TypeScript, Go, or Rust requires language-server protocol (LSP) integrations or external Tree-sitter bindings.
+
+### 2. Subprocess Isolation vs Full Containerization (Docker)
+* **Limitation**: Sandboxed verification currently executes in isolated temporary directories via OS subprocesses with stripped environment variables (`_KEEP_ENV`).
+* **Rationale**: Full Docker container isolation (memory cgroups, zero network namespace, CPU quota) is specified in `AGENTS.md` for subsequent evaluation hardening. Running in local subprocesses requires caution when evaluating untrusted code.
+
+### 3. Static Planning RAG vs Dynamic Tool-Assisted Search
+* **Limitation**: RAG retrieval is executed once during the **Planner** stage (top-k symbols and docstrings). 
+* **Rationale**: If the Coder discovers an unexpected deep dependency during implementation, it cannot currently issue secondary retrieval queries mid-generation. (Roadmap: Implement agentic tool-calling retrieval where Coder can invoke `search_code()`).
+
+### 4. Single-Turn Monolithic Generation Ceiling
+* **Limitation**: For large legacy files (>500 lines) that are neither scaffolded from scratch nor matched by surgical search blocks, rewriting the entire file can exceed LLM output token ceilings (typically 4,096 tokens).
+* **Rationale**: Mitigated by Surgical Block Patching (`patching.py`), but files with extensive scattered rewrites still push generation boundaries.
+
+### 5. Upstream LLM Quota & Fallback Cascades
+* **Limitation**: When primary Gemini models (e.g. 3.7 Flash) encounter rate limits (HTTP 429) or temporary outages (HTTP 503), the dynamic cascade falls back to smaller models (e.g. 3.5 Flash Lite).
+* **Rationale**: While fallback ensures the system never crashes, smaller models have slightly higher hallucination rates on complex multi-step refactoring, requiring multiple iteration rounds.
+
+### 6. Static Engineering Guidelines Injection
+* **Limitation**: The complete `docs/agent_guidelines.md` file (~8KB) is injected into prompt contexts in full whenever guidelines are active.
+* **Rationale**: As guidelines expand to include frontend frameworks and database standards, wholesale injection consumes context budget. (Roadmap: Policy-RAG to retrieve only relevant guideline sections based on the task description).
+
 
