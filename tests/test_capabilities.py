@@ -100,6 +100,10 @@ def test_file_tier_and_topological_sort():
 
 def test_extract_file_interfaces():
     code = (
+        "@dataclass\n"
+        "class InventoryItem:\n"
+        "    item_id: str\n"
+        "    quantity: int\n\n"
         "class InventoryManager:\n"
         "    def __init__(self, capacity: int) -> None:\n"
         "        self.capacity = capacity\n\n"
@@ -109,9 +113,12 @@ def test_extract_file_interfaces():
         "    return f'${amount:.2f}'\n"
     )
     interfaces = extract_file_interfaces(code, "inventory.py")
+    assert "class InventoryItem:" in interfaces
+    assert "item_id: str" in interfaces
+    assert "quantity: int" in interfaces
     assert "class InventoryManager:" in interfaces
-    assert "def add_stock(self, item_id, count): ..." in interfaces
-    assert "def format_currency(amount): ..." in interfaces
+    assert "def add_stock(self, item_id, count) -> bool: ..." in interfaces
+    assert "def format_currency(amount) -> str: ..." in interfaces
 
 
 def test_coder_resolves_surgical_patch_in_state(tmp_path):

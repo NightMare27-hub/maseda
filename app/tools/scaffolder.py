@@ -59,12 +59,21 @@ def extract_file_interfaces(code: str, file_path: str) -> str:
             base_str = f"({', '.join(bases)})" if bases else ""
             lines.append(f"class {node.name}{base_str}:")
             for sub in node.body:
-                if isinstance(sub, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if isinstance(sub, ast.AnnAssign) and isinstance(sub.target, ast.Name):
+                    ann = ast.unparse(sub.annotation) if hasattr(ast, "unparse") else "Any"
+                    lines.append(f"    {sub.target.id}: {ann}")
+                elif isinstance(sub, ast.Assign):
+                    for tgt in sub.targets:
+                        if isinstance(tgt, ast.Name):
+                            lines.append(f"    {tgt.id} = ...")
+                elif isinstance(sub, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     args = [a.arg for a in sub.args.args]
-                    lines.append(f"    def {sub.name}({', '.join(args)}): ...")
+                    ret = f" -> {ast.unparse(sub.returns)}" if getattr(sub, "returns", None) and hasattr(ast, "unparse") else ""
+                    lines.append(f"    def {sub.name}({', '.join(args)}){ret}: ...")
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             args = [a.arg for a in node.args.args]
-            lines.append(f"def {node.name}({', '.join(args)}): ...")
+            ret = f" -> {ast.unparse(node.returns)}" if getattr(node, "returns", None) and hasattr(ast, "unparse") else ""
+            lines.append(f"def {node.name}({', '.join(args)}){ret}: ...")
 
     return "\n".join(lines)
 
