@@ -18,6 +18,7 @@
 | 2026-10-10 | Antigravity | Day 5 Implementation Plan Formulation | Authored comprehensive `docs/day5_implementation_plan.md` detailing 3-condition comparative experiments (No-RAG vs Dense vs Hybrid), statistical metrics, LaTeX tables, plot exports, and failure taxonomy. |
 | 2026-10-10 | Antigravity | Dissertation Project Chronicle Formulation | Authored comprehensive `docs/dissertation_project_chronicle.md` capturing Day 1 to Day 4 technical retrospective, guardrails, technology matrix, and chapter mapping for the 40-60 page thesis. |
 | 2026-10-10 | Antigravity | Capability Upgrade Plan Formulation | Authored `docs/capability_upgrade_plan.md` detailing Multi-File Incremental Scaffolding (Capability 2) and Surgical Block Patching (Capability 3). |
+| 2026-10-10 | Antigravity | Surgical Patching & Scaffolding Implementation | Implemented `app/tools/patching.py` (whitespace-tolerant block replacement), updated `app/tools/files.py` and `app/agents/coder.py` to resolve patch objects, implemented `app/tools/scaffolder.py` (topological dependency ordering and sequential synthesis with AST interface memory), added 8 unit tests in `tests/test_capabilities.py` (all 45 tests passing offline). |
 
 
 

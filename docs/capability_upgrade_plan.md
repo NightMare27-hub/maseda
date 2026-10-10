@@ -214,3 +214,4 @@ Build comprehensive offline unit tests:
 - [ ] Multi-file scaffolding synthesizes $\ge 5$ files sequentially without hitting LLM output token limits.
 - [ ] All unit tests pass offline with `pytest -q` (37 existing tests + new capability tests).
 - [ ] Architectural decisions documented in `docs/decisions.md` and `docs/ai_usage_log.md`.
+

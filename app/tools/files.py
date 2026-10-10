@@ -32,34 +32,72 @@ def is_test_file(rel: str) -> bool:
     return name.startswith("test_") or name.endswith("_test.py") or name == "conftest.py"
 
 
+def resolve_all_edits(repo: str, edits: dict) -> tuple[dict[str, str], bool, str]:
+    """Resolve an edits dict (containing full text or surgical patches) into complete file contents."""
+    from app.tools.patching import resolve_file_content
+
+    resolved = {}
+    for rel, spec in edits.items():
+        try:
+            old = read_file(repo, rel)
+        except (FileNotFoundError, ValueError):
+            old = ""
+        new_content, ok, msg = resolve_file_content(old, spec)
+        if not ok:
+            return {}, False, f"Failed to resolve edits for {rel}: {msg}"
+        resolved[rel] = new_content
+    return resolved, True, ""
+
+
 def apply_edits(root: str, edits: dict) -> None:
-    for rel, content in edits.items():
+    from app.tools.patching import resolve_file_content
+
+    for rel, spec in edits.items():
         p = safe_path(root, rel)
+        old = p.read_text(encoding="utf-8") if p.exists() else ""
+        content, ok, msg = resolve_file_content(old, spec)
+        if not ok:
+            raise ValueError(f"Cannot apply edit to {rel}: {msg}")
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(content, encoding="utf-8")
 
 
 def make_diff(repo: str, edits: dict) -> str:
+    from app.tools.patching import resolve_file_content
+
     chunks = []
-    for rel, new in sorted(edits.items()):
+    for rel, spec in sorted(edits.items()):
         try:
             old = read_file(repo, rel)
-        except FileNotFoundError:
+        except (FileNotFoundError, ValueError):
             old = ""
+        new, ok, _ = resolve_file_content(old, spec)
         diff = difflib.unified_diff(
-            old.splitlines(keepends=True), new.splitlines(keepends=True),
-            fromfile=f"a/{rel}", tofile=f"b/{rel}",
+            old.splitlines(keepends=True),
+            new.splitlines(keepends=True),
+            fromfile=f"a/{rel}",
+            tofile=f"b/{rel}",
         )
         chunks.append("".join(diff))
     return "\n".join(c for c in chunks if c)
 
 
-def validate_python_syntax(edits: dict) -> tuple[bool, str]:
+def validate_python_syntax(edits: dict, repo: str | None = None) -> tuple[bool, str]:
     """Check Python files in edits for syntax errors using ast.parse."""
     import ast
+    from app.tools.patching import resolve_file_content
 
-    for rel, content in sorted(edits.items()):
+    for rel, spec in sorted(edits.items()):
         if rel.endswith(".py"):
+            old = ""
+            if repo:
+                try:
+                    old = read_file(repo, rel)
+                except Exception:
+                    old = ""
+            content, ok, err_msg = resolve_file_content(old, spec)
+            if not ok:
+                return False, f"Patch resolution error in {rel}: {err_msg}"
             try:
                 ast.parse(content, filename=rel)
             except SyntaxError as e:
