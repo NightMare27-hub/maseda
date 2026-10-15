@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 940" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff" />
+      <stop offset="100%" stop-color="#dbeafe" />
+    </linearGradient>
+    <linearGradient id="decisionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fefce8" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+    <linearGradient id="haltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef2f2" />
+      <stop offset="100%" stop-color="#fee2e2" />
+    </linearGradient>
+    <linearGradient id="successGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4" />
+      <stop offset="100%" stop-color="#bbf7d0" />
+    </linearGradient>
+    <linearGradient id="warningGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb" />
+      <stop offset="100%" stop-color="#fde68a" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.08" />
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#334155" />
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#16a34a" />
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">Figure 4.4: Re-re-verification Phase Process Flow</text>
+  <text x="440" y="60" text-anchor="middle" font-size="12" fill="#64748b">Graph Conditional Routing, Stagnation Circuit Breakers &amp; Bounded Iteration Lifecycle</text>
+
+  <!-- Start Node -->
+  <rect x="250" y="85" width="380" height="46" rx="23" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="113" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">State Hand-off from Reviewer Node</text>
+
+  <!-- Line 1 to Router -->
+  <line x1="440" y1="131" x2="440" y2="159" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Decision 1: route() evaluation -->
+  <polygon points="440,161 670,206 440,251 210,206" fill="url(#decisionGrad)" stroke="#ca8a04" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="201" text-anchor="middle" font-size="12" font-weight="700" fill="#713f12">route(state) Conditional Router</text>
+  <text x="440" y="218" text-anchor="middle" font-size="11" fill="#854d0e">Check review_approved, MAX_ITERS &amp; stagnation_count</text>
+
+  <!-- Branch: Approved (Left to Success) -->
+  <line x1="210" y1="206" x2="120" y2="206" stroke="#16a34a" stroke-width="2" />
+  <line x1="120" y1="206" x2="120" y2="280" stroke="#16a34a" stroke-width="2" marker-end="url(#arrowGreen)" />
+  <text x="145" y="198" font-size="11" font-weight="700" fill="#16a34a">Approved</text>
+
+  <rect x="20" y="282" width="200" height="70" rx="14" fill="url(#successGrad)" stroke="#22c55e" stroke-width="2" filter="url(#shadow)" />
+  <text x="120" y="307" text-anchor="middle" font-size="12" font-weight="700" fill="#14532d">TERMINATE: SUCCESS</text>
+  <text x="120" y="325" text-anchor="middle" font-size="10" fill="#166534">Tests pass + usability approved</text>
+  <text x="120" y="338" text-anchor="middle" font-size="10" fill="#166534">Export verified patch &amp; explanation</text>
+
+  <!-- Branch: Circuit Breakers Tripped (Right to Halt) -->
+  <line x1="670" y1="206" x2="760" y2="206" stroke="#dc2626" stroke-width="2" />
+  <line x1="760" y1="206" x2="760" y2="280" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowRed)" />
+  <text x="690" y="198" font-size="11" font-weight="700" fill="#dc2626">Circuit Breaker</text>
+
+  <rect x="660" y="282" width="200" height="70" rx="14" fill="url(#haltGrad)" stroke="#ef4444" stroke-width="2" filter="url(#shadow)" />
+  <text x="760" y="307" text-anchor="middle" font-size="12" font-weight="700" fill="#991b1b">TERMINATE: HALT</text>
+  <text x="760" y="325" text-anchor="middle" font-size="10" fill="#b91c1c">iteration &gt;= MAX_ITERS (3) OR</text>
+  <text x="760" y="338" text-anchor="middle" font-size="10" fill="#b91c1c">stagnation_count &gt;= 2 (repeats)</text>
+
+  <!-- Branch: Not Approved & Within Bounds (Down to Refinement Loop) -->
+  <line x1="440" y1="251" x2="440" y2="299" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="452" y="278" font-size="11" font-weight="600" fill="#2563eb">Unapproved &amp; Within Budget</text>
+
+  <!-- Step: Inject Feedback into Coder -->
+  <rect x="220" y="301" width="440" height="58" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="324" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Assemble Refinement Context for Coder</text>
+  <text x="440" y="343" text-anchor="middle" font-size="11" fill="#475569">Inject reviewer feedback, previous diff, test failures &amp; root causes</text>
+
+  <!-- Line to Warning Check -->
+  <line x1="440" y1="359" x2="440" y2="394" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Decision: Stagnation Warning -->
+  <polygon points="440,396 640,436 440,476 240,436" fill="url(#decisionGrad)" stroke="#ca8a04" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="432" text-anchor="middle" font-size="12" font-weight="700" fill="#713f12">stagnation_count == 1?</text>
+  <text x="440" y="448" text-anchor="middle" font-size="11" fill="#854d0e">(Did previous iteration repeat identical edits?)</text>
+
+  <!-- Stagnation = 1 (Left branch to warning injection) -->
+  <line x1="240" y1="436" x2="160" y2="436" stroke="#d97706" stroke-width="1.8" />
+  <line x1="160" y1="436" x2="160" y2="505" stroke="#d97706" stroke-width="1.8" marker-end="url(#arrow)" />
+  <text x="175" y="428" font-size="11" font-weight="600" fill="#d97706">Yes (Count=1)</text>
+
+  <rect x="60" y="507" width="200" height="66" rx="10" fill="url(#warningGrad)" stroke="#f59e0b" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="160" y="530" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">Inject Stagnation Warning</text>
+  <text x="160" y="547" text-anchor="middle" font-size="10" fill="#b45309">"Previous edits were identical.</text>
+  <text x="160" y="560" text-anchor="middle" font-size="10" fill="#b45309">Change implementation approach!"</text>
+
+  <!-- Stagnation = 0 (Direct Down) -->
+  <line x1="440" y1="476" x2="440" y2="520" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="452" y="500" font-size="11" font-weight="600" fill="#475569">No (Count=0)</text>
+
+  <!-- Connect warning back to Coder Execution -->
+  <line x1="160" y1="573" x2="160" y2="610" stroke="#334155" stroke-width="1.8" />
+  <line x1="160" y1="610" x2="230" y2="610" stroke="#334155" stroke-width="1.8" />
+
+  <!-- Coder Generates New Edits -->
+  <rect x="230" y="582" width="420" height="58" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="605" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Coder Synthesises Refined Candidate Patch</text>
+  <text x="440" y="624" text-anchor="middle" font-size="11" fill="#475569">Generates full replacement or surgical search/replace blocks</text>
+
+  <!-- Line to Hash / Equality Comparison -->
+  <line x1="440" y1="640" x2="440" y2="675" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Decision: Edit Equality Detection -->
+  <polygon points="440,677 650,717 440,757 230,717" fill="url(#decisionGrad)" stroke="#ca8a04" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="713" text-anchor="middle" font-size="12" font-weight="700" fill="#713f12">Identical to Previous Candidate?</text>
+  <text x="440" y="729" text-anchor="middle" font-size="11" fill="#854d0e">all(prev.get(k) == v for k, v in accepted.items())</text>
+
+  <!-- If Identical: Stagnation = Stagnation + 1 -->
+  <line x1="650" y1="717" x2="740" y2="717" stroke="#dc2626" stroke-width="1.8" />
+  <line x1="740" y1="717" x2="740" y2="770" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arrowRed)" />
+  <text x="690" y="709" font-size="11" font-weight="600" fill="#dc2626">Yes (Repeat)</text>
+
+  <rect x="650" y="772" width="180" height="50" rx="10" fill="url(#warningGrad)" stroke="#f59e0b" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="740" y="793" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">stagnation += 1</text>
+  <text x="740" y="810" text-anchor="middle" font-size="10" fill="#b45309">Trip counter increments</text>
+
+  <!-- If Different: Stagnation = 0 -->
+  <line x1="230" y1="717" x2="140" y2="717" stroke="#16a34a" stroke-width="1.8" />
+  <line x1="140" y1="717" x2="140" y2="770" stroke="#16a34a" stroke-width="1.8" marker-end="url(#arrowGreen)" />
+  <text x="175" y="709" font-size="11" font-weight="600" fill="#16a34a">No (Novel)</text>
+
+  <rect x="50" y="772" width="180" height="50" rx="10" fill="url(#passGrad)" stroke="#22c55e" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="140" y="793" text-anchor="middle" font-size="11" font-weight="700" fill="#14532d">stagnation = 0</text>
+  <text x="140" y="810" text-anchor="middle" font-size="10" fill="#166534">Trip counter reset</text>
+
+  <!-- Re-run pipeline -->
+  <line x1="140" y1="822" x2="140" y2="860" stroke="#334155" stroke-width="1.8" />
+  <line x1="740" y1="822" x2="740" y2="860" stroke="#334155" stroke-width="1.8" />
+  <line x1="140" y1="860" x2="740" y2="860" stroke="#334155" stroke-width="1.8" />
+  <line x1="440" y1="860" x2="440" y2="880" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <rect x="230" y="882" width="420" height="44" rx="22" fill="#1e293b" stroke="#0f172a" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="440" y="909" text-anchor="middle" font-size="12" font-weight="700" fill="#f8fafc">Re-execute Verification &amp; Re-verification (run_tests &amp; reviewer)</text>
+</svg>

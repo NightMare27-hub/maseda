@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 920" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff" />
+      <stop offset="100%" stop-color="#dbeafe" />
+    </linearGradient>
+    <linearGradient id="decisionGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fefce8" />
+      <stop offset="100%" stop-color="#fef08a" />
+    </linearGradient>
+    <linearGradient id="smokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4ff" />
+      <stop offset="100%" stop-color="#fae8ff" />
+    </linearGradient>
+    <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdf4" />
+      <stop offset="100%" stop-color="#bbf7d0" />
+    </linearGradient>
+    <linearGradient id="exitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.08" />
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#334155" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="420" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">Figure 4.2: Verification Phase Process Flow</text>
+  <text x="420" y="60" text-anchor="middle" font-size="12" fill="#64748b">Isolated Temp Workspace, Scrubbed Environment, Headless Subprocess Pytest &amp; Smoke Tests</text>
+
+  <!-- Start -->
+  <rect x="270" y="85" width="300" height="46" rx="23" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="113" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Validated Edits Received</text>
+
+  <!-- Line 1 to 2 -->
+  <line x1="420" y1="131" x2="420" y2="159" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 1: Tempdir & Copy -->
+  <rect x="230" y="161" width="380" height="54" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="184" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Create Isolated Temporary Workspace</text>
+  <text x="420" y="202" text-anchor="middle" font-size="11" fill="#475569">tempfile.mkdtemp() &amp; shutil.copytree() (ignoring .git, .venv, caches)</text>
+
+  <!-- Line 2 to 3 -->
+  <line x1="420" y1="215" x2="420" y2="243" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 2: Apply Edits -->
+  <rect x="250" y="245" width="340" height="48" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="274" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Apply Resolved Edits Inside Tempdir</text>
+
+  <!-- Line 3 to 4 -->
+  <line x1="420" y1="293" x2="420" y2="321" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 3: Environment Scrubbing -->
+  <rect x="210" y="323" width="420" height="58" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="347" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Scrub Environment Variables &amp; Set Paths</text>
+  <text x="420" y="366" text-anchor="middle" font-size="11" fill="#475569">Omit all API keys (whitelist PATH, TEMP, etc.); set PYTHONPATH = tempdir</text>
+
+  <!-- Line 4 to 5 -->
+  <line x1="420" y1="381" x2="420" y2="409" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 4: Run Pytest Subprocess -->
+  <rect x="210" y="411" width="420" height="58" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="435" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Launch Subprocess: python -m pytest -q</text>
+  <text x="420" y="454" text-anchor="middle" font-size="11" fill="#475569">Strict timeout enforcement (60s) to prevent infinite loops</text>
+
+  <!-- Line 5 to 6 -->
+  <line x1="420" y1="469" x2="420" y2="497" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 5: Smoke Tests (Streamlit + Entrypoint) -->
+  <rect x="200" y="499" width="440" height="62" rx="12" fill="url(#smokeGrad)" stroke="#c084fc" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="523" text-anchor="middle" font-size="13" font-weight="600" fill="#581c87">Headless Entrypoint &amp; UI Smoke Tests</text>
+  <text x="420" y="541" text-anchor="middle" font-size="11" fill="#7e22ce">Streamlit AppTest (streamlit.testing.v1.AppTest) for Web Apps</text>
+  <text x="420" y="553" text-anchor="middle" font-size="10" fill="#9333ea">+ Top-level module import checks to trap runtime exceptions</text>
+
+  <!-- Line 6 to 7 -->
+  <line x1="420" y1="561" x2="420" y2="589" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 6: Diagnostic Enrichment -->
+  <rect x="220" y="591" width="400" height="54" rx="12" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="614" text-anchor="middle" font-size="13" font-weight="600" fill="#1e3a8a">Capture Stdout, Stderr &amp; Enrich Diagnostics</text>
+  <text x="420" y="632" text-anchor="middle" font-size="11" fill="#475569">Inject hints: [INTERACTIVE INPUT], [OFFLINE SANDBOX], [HEADLESS DISPLAY]</text>
+
+  <!-- Line 7 to Decision -->
+  <line x1="420" y1="645" x2="420" y2="673" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Decision: Exit Code Dispatcher -->
+  <polygon points="420,675 620,715 420,755 220,715" fill="url(#decisionGrad)" stroke="#ca8a04" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="711" text-anchor="middle" font-size="12" font-weight="700" fill="#713f12">Pytest Exit Code &amp;</text>
+  <text x="420" y="726" text-anchor="middle" font-size="11" fill="#854d0e">Smoke Status?</text>
+
+  <!-- 4 Outcome Boxes -->
+  <!-- Exit 0 -->
+  <line x1="220" y1="715" x2="110" y2="715" stroke="#334155" stroke-width="1.5" />
+  <line x1="110" y1="715" x2="110" y2="765" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+  <rect x="30" y="767" width="160" height="52" rx="10" fill="url(#passGrad)" stroke="#22c55e" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="110" y="789" text-anchor="middle" font-size="11" font-weight="700" fill="#14532d">Exit 0: Green</text>
+  <text x="110" y="806" text-anchor="middle" font-size="10" fill="#166534">All test assertions pass</text>
+
+  <!-- Exit 1 -->
+  <line x1="330" y1="740" x2="310" y2="765" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+  <rect x="215" y="767" width="170" height="52" rx="10" fill="url(#exitGrad)" stroke="#94a3b8" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="300" y="789" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">Exit 1: Test Failure</text>
+  <text x="300" y="806" text-anchor="middle" font-size="10" fill="#475569">Assertion or logic error</text>
+
+  <!-- Exit 5 -->
+  <line x1="510" y1="740" x2="530" y2="765" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+  <rect x="445" y="767" width="170" height="52" rx="10" fill="url(#exitGrad)" stroke="#94a3b8" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="530" y="789" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">Exit 5: Empty Suite</text>
+  <text x="530" y="806" text-anchor="middle" font-size="10" fill="#475569">No test functions found</text>
+
+  <!-- Other / Timeout -->
+  <line x1="620" y1="715" x2="730" y2="715" stroke="#334155" stroke-width="1.5" />
+  <line x1="730" y1="715" x2="730" y2="765" stroke="#334155" stroke-width="1.5" marker-end="url(#arrow)" />
+  <rect x="645" y="767" width="170" height="52" rx="10" fill="url(#exitGrad)" stroke="#94a3b8" stroke-width="1.5" filter="url(#shadow)" />
+  <text x="730" y="789" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">Other / Timeout</text>
+  <text x="730" y="806" text-anchor="middle" font-size="10" fill="#475569">Hanging execution/error</text>
+
+  <!-- Lines converging into Bottom Node -->
+  <line x1="110" y1="819" x2="110" y2="855" stroke="#334155" stroke-width="1.5" />
+  <line x1="300" y1="819" x2="300" y2="845" stroke="#334155" stroke-width="1.5" />
+  <line x1="530" y1="819" x2="530" y2="845" stroke="#334155" stroke-width="1.5" />
+  <line x1="730" y1="819" x2="730" y2="855" stroke="#334155" stroke-width="1.5" />
+
+  <line x1="110" y1="855" x2="730" y2="855" stroke="#334155" stroke-width="1.5" />
+  <line x1="420" y1="855" x2="420" y2="875" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Final Node: Send to Reviewer -->
+  <rect x="250" y="877" width="340" height="38" rx="19" fill="url(#primaryGrad)" stroke="#3b82f6" stroke-width="1.8" filter="url(#shadow)" />
+  <text x="420" y="901" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">Deliver Structured Logs to Phase 4.3: Reviewer</text>
+</svg>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASEDA: Chapter 4 Technical Architecture Figures</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      max-width: 950px;
+      width: 100%;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    p.subtitle {
+      margin: 8px 0 0 0;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .figure-card {
+      max-width: 950px;
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      box-sizing: border-box;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 16px;
+    }
+    .card-title h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #f8fafc;
+    }
+    .card-title p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    a.btn {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+    }
+    a.btn:hover {
+      background: #1d4ed8;
+    }
+    a.btn.secondary {
+      background: #334155;
+    }
+    a.btn.secondary:hover {
+      background: #475569;
+    }
+    .diagram-frame {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 880px;
+      display: block;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>MASEDA Chapter 4 Technical Architecture Figures</h1>
+    <p class="subtitle">Publication-grade system process flows: Correction, Verification, Re-verification, and Circuit Breakers</p>
+  </div>
+
+  <!-- Figure 4.1 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 4.1: Correction Phase Process Flow</h2>
+        <p>Planning, Code Generation, Safe Path Sanitisation, Patch Resolution & AST Pre-check</p>
+      </div>
+      <div class="btn-group">
+        <a href="figure4_1_correction_phase.png" download="figure4_1_correction_phase.png" class="btn">
+          📷 Download PNG
+        </a>
+        <a href="figure4_1_correction_phase.svg" download="figure4_1_correction_phase.svg" class="btn secondary">
+          📥 Download SVG
+        </a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="figure4_1_correction_phase.svg" alt="Figure 4.1 Correction Phase" />
+    </div>
+  </div>
+
+  <!-- Figure 4.2 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 4.2: Verification Phase Process Flow</h2>
+        <p>Isolated Temp Directory, Scrubbed Environment, Headless Subprocess Pytest & UI Smoke Checks</p>
+      </div>
+      <div class="btn-group">
+        <a href="figure4_2_verification_phase.png" download="figure4_2_verification_phase.png" class="btn">
+          📷 Download PNG
+        </a>
+        <a href="figure4_2_verification_phase.svg" download="figure4_2_verification_phase.svg" class="btn secondary">
+          📥 Download SVG
+        </a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="figure4_2_verification_phase.svg" alt="Figure 4.2 Verification Phase" />
+    </div>
+  </div>
+
+  <!-- Figure 4.3 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 4.3: Re-verification Phase Process Flow</h2>
+        <p>Dual-Gate Audit (Tests + Operational Usability), Pydantic Validation & Reflective Feedback</p>
+      </div>
+      <div class="btn-group">
+        <a href="figure4_3_reverification_phase.png" download="figure4_3_reverification_phase.png" class="btn">
+          📷 Download PNG
+        </a>
+        <a href="figure4_3_reverification_phase.svg" download="figure4_3_reverification_phase.svg" class="btn secondary">
+          📥 Download SVG
+        </a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="figure4_3_reverification_phase.svg" alt="Figure 4.3 Re-verification Phase" />
+    </div>
+  </div>
+
+  <!-- Figure 4.4 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 4.4: Re-re-verification Phase Process Flow</h2>
+        <p>LangGraph Conditional Router, Stagnation Repeat-Edit Breakers & Bounded Iteration Lifecycle</p>
+      </div>
+      <div class="btn-group">
+        <a href="figure4_4_rereverification_phase.png" download="figure4_4_rereverification_phase.png" class="btn">
+          📷 Download PNG
+        </a>
+        <a href="figure4_4_rereverification_phase.svg" download="figure4_4_rereverification_phase.svg" class="btn secondary">
+          📥 Download SVG
+        </a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="figure4_4_rereverification_phase.svg" alt="Figure 4.4 Re-re-verification Phase" />
+    </div>
+  </div>
+</body>
+</html>
