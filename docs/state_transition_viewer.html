@@ -22,6 +22,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
     h1 {
       margin: 0;
@@ -38,7 +40,7 @@
       display: flex;
       gap: 12px;
     }
-    button, a.btn {
+    a.btn {
       background: #2563eb;
       color: #ffffff;
       border: none;
@@ -53,13 +55,13 @@
       gap: 8px;
       transition: background 0.15s ease;
     }
-    button:hover, a.btn:hover {
+    a.btn:hover {
       background: #1d4ed8;
     }
-    button.secondary, a.btn.secondary {
+    a.btn.secondary {
       background: #334155;
     }
-    button.secondary:hover, a.btn.secondary:hover {
+    a.btn.secondary:hover {
       background: #475569;
     }
     .diagram-frame {
@@ -73,11 +75,12 @@
       display: flex;
       justify-content: center;
     }
-    object, svg {
+    img {
       width: 100%;
       height: auto;
       max-width: 850px;
       display: block;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -88,55 +91,17 @@
       <p>Accurate Node Execution, State Schema Passing, and Conditional Edge Routing</p>
     </div>
     <div class="btn-group">
+      <a href="langgraph_state_transitions.png" download="langgraph_state_transitions.png" class="btn">
+        📷 Download PNG (Ready)
+      </a>
       <a href="langgraph_state_transitions.svg" download="langgraph_state_transitions.svg" class="btn secondary">
         📥 Download SVG
       </a>
-      <button id="download-png-btn" class="btn">
-        📷 Download PNG (High-Res)
-      </button>
     </div>
   </div>
 
   <div class="diagram-frame">
-    <object id="svg-object" type="image/svg+xml" data="langgraph_state_transitions.svg">
-      Your browser does not support SVG.
-    </object>
+    <img src="langgraph_state_transitions.png" alt="MASEDA LangGraph State Transition Diagram" />
   </div>
-
-  <script>
-    document.getElementById("download-png-btn").addEventListener("click", function() {
-      fetch("langgraph_state_transitions.svg")
-        .then(res => res.text())
-        .then(svgText => {
-          const svgBlob = new Blob([svgText], {type: "image/svg+xml;charset=utf-8"});
-          const URL = window.URL || window.webkitURL || window;
-          const blobURL = URL.createObjectURL(svgBlob);
-          
-          const image = new Image();
-          image.onload = function() {
-            const canvas = document.createElement("canvas");
-            // 2x upscale for 300 DPI publication quality
-            const scale = 2;
-            canvas.width = 850 * scale;
-            canvas.height = 1020 * scale;
-            const ctx = canvas.getContext("2d");
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.scale(scale, scale);
-            ctx.drawImage(image, 0, 0);
-            
-            const pngURL = canvas.toDataURL("image/png");
-            const downloadLink = document.createElement("a");
-            downloadLink.href = pngURL;
-            downloadLink.download = "langgraph_state_transitions.png";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            URL.revokeObjectURL(blobURL);
-          };
-          image.src = blobURL;
-        });
-    });
-  </script>
 </body>
 </html>

@@ -156,3 +156,4 @@
     <text x="180" y="40" text-anchor="middle" font-size="10.5" fill="#475569">Computes diff via difflib | Logs JSONL audit | Applies to disk if --apply</text>
   </g>
 </svg>
+

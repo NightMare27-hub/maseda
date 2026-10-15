@@ -22,6 +22,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
     h1 {
       margin: 0;
@@ -38,7 +40,7 @@
       display: flex;
       gap: 12px;
     }
-    button, a.btn {
+    a.btn {
       background: #2563eb;
       color: #ffffff;
       border: none;
@@ -53,13 +55,13 @@
       gap: 8px;
       transition: background 0.15s ease;
     }
-    button:hover, a.btn:hover {
+    a.btn:hover {
       background: #1d4ed8;
     }
-    button.secondary, a.btn.secondary {
+    a.btn.secondary {
       background: #334155;
     }
-    button.secondary:hover, a.btn.secondary:hover {
+    a.btn.secondary:hover {
       background: #475569;
     }
     .canvas-container {
@@ -74,10 +76,11 @@
       padding: 16px;
       box-sizing: border-box;
     }
-    img, svg {
+    img {
       width: 100%;
       height: auto;
       display: block;
+      border-radius: 8px;
     }
   </style>
 </head>
@@ -85,62 +88,20 @@
   <div class="header">
     <div>
       <h1>MASEDA: High-Level Architecture Diagram</h1>
-      <p>Publication-Grade Vector Diagram for Dissertation, Slides & Reports</p>
+      <p>Publication-Grade Vector Diagram for Dissertation, Slides &amp; Reports</p>
     </div>
     <div class="btn-group">
+      <a href="maseda_high_level_architecture.png" download="maseda_high_level_architecture.png" class="btn">
+        📷 Download PNG (Ready)
+      </a>
       <a href="maseda_high_level_architecture.svg" download="maseda_high_level_architecture.svg" class="btn secondary">
         📥 Download SVG
       </a>
-      <button id="download-png-btn" class="btn">
-        📷 Download PNG (High-Res)
-      </button>
     </div>
   </div>
 
   <div class="canvas-container" id="svg-container">
-    <object id="svg-object" type="image/svg+xml" data="maseda_high_level_architecture.svg" style="width: 100%; height: auto;">
-      Your browser does not support SVG.
-    </object>
+    <img src="maseda_high_level_architecture.png" alt="MASEDA High-Level System Architecture" />
   </div>
-
-  <script>
-    document.getElementById("download-png-btn").addEventListener("click", function() {
-      fetch("maseda_high_level_architecture.svg")
-        .then(res => res.text())
-        .then(svgText => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(svgText, "image/svg+xml");
-          const svgElement = doc.documentElement;
-          
-          const svgBlob = new Blob([svgText], {type: "image/svg+xml;charset=utf-8"});
-          const URL = window.URL || window.webkitURL || window;
-          const blobURL = URL.createObjectURL(svgBlob);
-          
-          const image = new Image();
-          image.onload = function() {
-            const canvas = document.createElement("canvas");
-            // 2x upscale for crisp 300 DPI print quality
-            const scale = 2;
-            canvas.width = 1200 * scale;
-            canvas.height = 850 * scale;
-            const ctx = canvas.getContext("2d");
-            ctx.fillStyle = "#f8fafc";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.scale(scale, scale);
-            ctx.drawImage(image, 0, 0);
-            
-            const pngURL = canvas.toDataURL("image/png");
-            const downloadLink = document.createElement("a");
-            downloadLink.href = pngURL;
-            downloadLink.download = "maseda_high_level_architecture.png";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            URL.revokeObjectURL(blobURL);
-          };
-          image.src = blobURL;
-        });
-    });
-  </script>
 </body>
 </html>
