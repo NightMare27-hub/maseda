@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 1020" width="100%" height="100%" style="background:#ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#16a34a" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#d97706" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#9333ea" />
+    </marker>
+
+    <!-- Drop Shadows -->
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.06" />
+    </filter>
+    <filter id="container-shadow" x="-2%" y="-2%" width="104%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e3a8a" flood-opacity="0.06" />
+    </filter>
+  </defs>
+
+  <!-- Title & Subtitle -->
+  <text x="475" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a" letter-spacing="-0.3">MASEDA: Codebase RAG &amp; Hybrid Retrieval Pipeline</text>
+  <text x="475" y="60" text-anchor="middle" font-size="12" font-weight="500" fill="#64748b">AST-Aware Code Chunking, Dual Indexing &amp; Reciprocal Rank Fusion Architecture</text>
+
+  <!-- ========================================================================= -->
+  <!-- 1. INGESTION SUBSYSTEM (Top Container) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(60, 85)">
+    <rect width="830" height="375" rx="16" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" filter="url(#container-shadow)" />
+    <!-- Header -->
+    <rect width="830" height="38" rx="16" fill="#eff6ff" />
+    <rect y="24" width="830" height="14" fill="#eff6ff" />
+    <circle cx="24" cy="19" r="5" fill="#2563eb" />
+    <text x="38" y="24" font-size="14" font-weight="700" fill="#1e40af">Phase 1: Ingestion Pipeline (app/rag/chunk.py &amp; ingest.py)</text>
+    <text x="795" y="24" text-anchor="end" font-size="11" font-weight="600" fill="#3b82f6">Offline / Per Repository</text>
+
+    <!-- Repository Source Files -->
+    <g transform="translate(265, 55)">
+      <rect width="300" height="50" rx="10" fill="#ffffff" stroke="#475569" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="150" y="24" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">📁 Python Source Files (*.py)</text>
+      <text x="150" y="40" text-anchor="middle" font-size="10.5" fill="#64748b">Target repository modules (ignoring .git, .venv)</text>
+    </g>
+
+    <!-- Arrow: Source -> AST Chunker -->
+    <line x1="415" y1="105" x2="415" y2="135" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+
+    <!-- AST Chunker Node -->
+    <g transform="translate(190, 135)">
+      <rect width="450" height="74" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="2" filter="url(#card-shadow)" />
+      <text x="225" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1e40af">AST Code Chunker (chunk.py)</text>
+      <text x="225" y="44" text-anchor="middle" font-size="11" fill="#334155">• Slices by ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef</text>
+      <text x="225" y="60" text-anchor="middle" font-size="10.5" fill="#64748b">• Preserves decorators, signatures, docstrings | Fallback on SyntaxError</text>
+    </g>
+
+    <!-- Split Arrows: AST -> Dense & Sparse Paths -->
+    <path d="M 310 209 L 210 245" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <path d="M 520 209 L 620 245" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)" />
+
+    <!-- DENSE PATH: Embedding Model -->
+    <g transform="translate(60, 245)">
+      <rect width="300" height="50" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="1.6" filter="url(#card-shadow)" />
+      <text x="150" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">Embedding Model (embed.py)</text>
+      <text x="150" y="38" text-anchor="middle" font-size="10.5" fill="#64748b">Chroma default / FakeEmbedder for offline tests</text>
+    </g>
+
+    <!-- SPARSE PATH: CamelCase Tokenizer -->
+    <g transform="translate(470, 245)">
+      <rect width="300" height="50" rx="8" fill="#ffffff" stroke="#16a34a" stroke-width="1.6" filter="url(#card-shadow)" />
+      <text x="150" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">Token Corpus Builder (_tokens)</text>
+      <text x="150" y="38" text-anchor="middle" font-size="10.5" fill="#64748b">Splits CamelCase &amp; snake_case identifiers</text>
+    </g>
+
+    <!-- Arrows to Stores -->
+    <line x1="210" y1="295" x2="210" y2="315" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <line x1="620" y1="295" x2="620" y2="315" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)" />
+
+    <!-- DENSE STORE: ChromaDB -->
+    <g transform="translate(60, 315)">
+      <rect width="300" height="46" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="150" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e3a8a">⛁ ChromaDB Vector Store</text>
+      <text x="150" y="35" text-anchor="middle" font-size="10" fill="#475569">Persistent collection with count clamping guards</text>
+    </g>
+
+    <!-- SPARSE STORE: BM25 Index -->
+    <g transform="translate(470, 315)">
+      <rect width="300" height="46" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="150" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14532d">⛁ Rank-BM25 Index (BM25Okapi)</text>
+      <text x="150" y="35" text-anchor="middle" font-size="10" fill="#475569">Term frequency-inverse document frequency index</text>
+    </g>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 2. QUERY TIME SUBSYSTEM (Bottom Container) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(60, 485)">
+    <rect width="830" height="495" rx="16" fill="#f8fafc" stroke="#2563eb" stroke-width="2" filter="url(#container-shadow)" />
+    <!-- Header -->
+    <rect width="830" height="38" rx="16" fill="#eff6ff" />
+    <rect y="24" width="830" height="14" fill="#eff6ff" />
+    <circle cx="24" cy="19" r="5" fill="#2563eb" />
+    <text x="38" y="24" font-size="14" font-weight="700" fill="#1e40af">Phase 2: Query-Time Hybrid Retrieval (app/rag/retrieve.py)</text>
+    <text x="795" y="24" text-anchor="end" font-size="11" font-weight="600" fill="#3b82f6">Runtime Execution</text>
+
+    <!-- Query Input -->
+    <g transform="translate(265, 55)">
+      <polygon points="15,0 300,0 285,46 0,46" fill="#ffffff" stroke="#3b82f6" stroke-width="2" filter="url(#card-shadow)" />
+      <text x="150" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af">Query: Task Description or Plan Step</text>
+      <text x="150" y="37" text-anchor="middle" font-size="10.5" fill="#64748b">e.g., "calculate portfolio diversification metrics"</text>
+    </g>
+
+    <!-- Split query to retrievers -->
+    <path d="M 330 101 L 210 135" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <path d="M 500 101 L 620 135" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)" />
+
+    <!-- DENSE RETRIEVER -->
+    <g transform="translate(60, 135)">
+      <rect width="300" height="65" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="150" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af">1. Dense Retriever: dense()</text>
+      <text x="150" y="40" text-anchor="middle" font-size="10.5" fill="#334155">Semantic nearest-neighbor embedding search</text>
+      <text x="150" y="55" text-anchor="middle" font-size="10" font-weight="600" fill="#2563eb">➔ Returns: Top-k dense candidates</text>
+    </g>
+
+    <!-- SPARSE RETRIEVER -->
+    <g transform="translate(470, 135)">
+      <rect width="300" height="65" rx="10" fill="#ffffff" stroke="#16a34a" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="150" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="#166534">2. Sparse Retriever: bm25()</text>
+      <text x="150" y="40" text-anchor="middle" font-size="10.5" fill="#334155">Okapi BM25 exact identifier matching</text>
+      <text x="150" y="55" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">➔ Returns: Top-k sparse candidates</text>
+    </g>
+
+    <!-- Convergence to RRF -->
+    <path d="M 210 200 L 350 235" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <path d="M 620 200 L 480 235" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)" />
+
+    <!-- RECIPROCAL RANK FUSION (RRF) -->
+    <g transform="translate(190, 235)">
+      <rect width="450" height="85" rx="12" fill="#fefce8" stroke="#ca8a04" stroke-width="2.2" filter="url(#card-shadow)" />
+      <text x="225" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="#854d0e">3. Reciprocal Rank Fusion: hybrid()</text>
+      <text x="225" y="46" text-anchor="middle" font-size="12" font-weight="700" fill="#a16207">RRF(d) = Σ [ 1 / (60 + rank_m(d)) ]</text>
+      <text x="225" y="64" text-anchor="middle" font-size="10.5" fill="#475569">• Parameter-free rank fusion (no fragile score normalization)</text>
+      <text x="225" y="78" text-anchor="middle" font-size="10.5" fill="#475569">• Prioritizes candidates appearing in both dense and sparse top-k</text>
+    </g>
+
+    <!-- Arrow: RRF -> Budget Slicer -->
+    <line x1="415" y1="320" x2="415" y2="350" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-amber)" />
+
+    <!-- TOKEN BUDGET SLICER -->
+    <g transform="translate(245, 350)">
+      <rect width="340" height="42" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="1.6" filter="url(#card-shadow)" />
+      <text x="170" y="18" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a3412">Context Budget Ceiling (Max 3,500 Tokens)</text>
+      <text x="170" y="33" text-anchor="middle" font-size="10" fill="#64748b">Drops low-ranked chunks to avoid context window dilution</text>
+    </g>
+
+    <!-- Arrow: Budget Slicer -> Agent Prompts -->
+    <line x1="415" y1="392" x2="415" y2="422" stroke="#2563eb" stroke-width="2.2" marker-end="url(#arrow-blue)" />
+
+    <!-- AGENT CONTEXT INGESTION -->
+    <g transform="translate(140, 422)">
+      <rect width="550" height="54" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="2" filter="url(#card-shadow)" />
+      <text x="275" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e40af">Cognitive Agent Context Ingestion</text>
+      <text x="275" y="36" text-anchor="middle" font-size="10.5" fill="#334155">• Planner: Receives top symbols &amp; docstrings to plan file changes</text>
+      <text x="275" y="49" text-anchor="middle" font-size="10.5" fill="#334155">• Coder: Receives complete AST function skeletons to avoid interface hallucination</text>
+    </g>
+  </g>
+
+  <!-- Connectors: Ingestion Stores -> Query Retrievers (Inter-container) -->
+  <path d="M 270 445 L 270 570" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-blue)" />
+  <path d="M 680 445 L 680 570" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-green)" />
+</svg>

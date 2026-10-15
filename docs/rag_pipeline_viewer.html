@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASEDA: RAG Ingestion & Hybrid Retrieval Pipeline</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      max-width: 950px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    p {
+      margin: 4px 0 0 0;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+    a.btn {
+      background: #0d9488;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+    }
+    a.btn:hover {
+      background: #0f766e;
+    }
+    a.btn.secondary {
+      background: #334155;
+    }
+    a.btn.secondary:hover {
+      background: #475569;
+    }
+    .diagram-frame {
+      max-width: 950px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 900px;
+      display: block;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>RAG Ingestion & Hybrid Retrieval Pipeline</h1>
+      <p>AST Hierarchical Chunking, Dual Indexing (Dense Chroma + Sparse BM25Okapi), and Reciprocal Rank Fusion (k=60)</p>
+    </div>
+    <div class="btn-group">
+      <a href="rag_pipeline_architecture.png" download="rag_pipeline_architecture.png" class="btn">
+        📷 Download PNG (Ready)
+      </a>
+      <a href="rag_pipeline_architecture.svg" download="rag_pipeline_architecture.svg" class="btn secondary">
+        📥 Download SVG
+      </a>
+    </div>
+  </div>
+
+  <div class="diagram-frame">
+    <img src="rag_pipeline_architecture.svg" alt="MASEDA RAG Ingestion & Hybrid Retrieval Pipeline Architecture" />
+  </div>
+</body>
+</html>
