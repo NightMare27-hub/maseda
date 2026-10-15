@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASEDA: LangGraph State Transition Architecture</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    p {
+      margin: 4px 0 0 0;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+    button, a.btn {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+    }
+    button:hover, a.btn:hover {
+      background: #1d4ed8;
+    }
+    button.secondary, a.btn.secondary {
+      background: #334155;
+    }
+    button.secondary:hover, a.btn.secondary:hover {
+      background: #475569;
+    }
+    .diagram-frame {
+      max-width: 900px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+    }
+    object, svg {
+      width: 100%;
+      height: auto;
+      max-width: 850px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>LangGraph State Transition Diagram</h1>
+      <p>Accurate Node Execution, State Schema Passing, and Conditional Edge Routing</p>
+    </div>
+    <div class="btn-group">
+      <a href="langgraph_state_transitions.svg" download="langgraph_state_transitions.svg" class="btn secondary">
+        📥 Download SVG
+      </a>
+      <button id="download-png-btn" class="btn">
+        📷 Download PNG (High-Res)
+      </button>
+    </div>
+  </div>
+
+  <div class="diagram-frame">
+    <object id="svg-object" type="image/svg+xml" data="langgraph_state_transitions.svg">
+      Your browser does not support SVG.
+    </object>
+  </div>
+
+  <script>
+    document.getElementById("download-png-btn").addEventListener("click", function() {
+      fetch("langgraph_state_transitions.svg")
+        .then(res => res.text())
+        .then(svgText => {
+          const svgBlob = new Blob([svgText], {type: "image/svg+xml;charset=utf-8"});
+          const URL = window.URL || window.webkitURL || window;
+          const blobURL = URL.createObjectURL(svgBlob);
+          
+          const image = new Image();
+          image.onload = function() {
+            const canvas = document.createElement("canvas");
+            // 2x upscale for 300 DPI publication quality
+            const scale = 2;
+            canvas.width = 850 * scale;
+            canvas.height = 1020 * scale;
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(scale, scale);
+            ctx.drawImage(image, 0, 0);
+            
+            const pngURL = canvas.toDataURL("image/png");
+            const downloadLink = document.createElement("a");
+            downloadLink.href = pngURL;
+            downloadLink.download = "langgraph_state_transitions.png";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(blobURL);
+          };
+          image.src = blobURL;
+        });
+    });
+  </script>
+</body>
+</html>
