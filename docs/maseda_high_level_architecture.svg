@@ -1,0 +1,228 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="100%" height="100%" style="background:#f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563eb" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#16a34a" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626" />
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#d97706" />
+    </marker>
+
+    <!-- Drop Shadows -->
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06" />
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#0f172a" flood-opacity="0.04" />
+    </filter>
+    <filter id="container-shadow" x="-2%" y="-2%" width="104%" height="106%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#1e3a8a" flood-opacity="0.07" />
+    </filter>
+  </defs>
+
+  <!-- Title & Subtitle Banner -->
+  <text x="600" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a" letter-spacing="-0.5">MASEDA: Multi-Agent Software Development Assistant</text>
+  <text x="600" y="68" text-anchor="middle" font-size="13" font-weight="500" fill="#64748b">High-Level System Architecture &amp; Execution Dataflow</text>
+
+  <!-- ========================================================================= -->
+  <!-- 1. RAG ENGINE (Top Left) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(50, 100)">
+    <rect width="320" height="135" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" filter="url(#card-shadow)" />
+    <!-- Header -->
+    <rect width="320" height="34" rx="12" fill="#dcfce7" />
+    <rect y="22" width="320" height="12" fill="#dcfce7" />
+    <circle cx="20" cy="17" r="5" fill="#16a34a" />
+    <text x="34" y="22" font-size="14" font-weight="700" fill="#14532d">Codebase RAG Subsystem</text>
+    
+    <!-- Body Content -->
+    <text x="20" y="58" font-size="12" font-weight="600" fill="#166534">AST-Aware Multi-Representation Retrieval</text>
+    <text x="20" y="78" font-size="11" fill="#334155">• AST Class &amp; Function Chunker (syntax-safe)</text>
+    <text x="20" y="96" font-size="11" fill="#334155">• ChromaDB (Dense embeddings for semantic intent)</text>
+    <text x="20" y="114" font-size="11" fill="#334155">• Rank-BM25 (Sparse keywords for exact symbols)</text>
+    <text x="20" y="128" font-size="11" font-weight="600" fill="#15803d">➔ Reciprocal Rank Fusion (RRF: k=60)</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 2. LANGGRAPH ORCHESTRATOR CONTAINER (Center / Main) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(430, 95)">
+    <!-- Container background -->
+    <rect width="420" height="580" rx="16" fill="#f8faff" stroke="#2563eb" stroke-width="2.5" filter="url(#container-shadow)" />
+    <!-- Header bar -->
+    <rect width="420" height="42" rx="16" fill="#eff6ff" />
+    <rect y="28" width="420" height="14" fill="#eff6ff" />
+    <circle cx="24" cy="21" r="6" fill="#2563eb" />
+    <text x="38" y="26" font-size="15" font-weight="700" fill="#1e3a8a">LangGraph State Machine (Cyclic Directed Graph)</text>
+    <text x="385" y="25" text-anchor="end" font-size="11" font-weight="600" fill="#3b82f6">Shared State</text>
+
+    <!-- NODE 1: Planner Agent -->
+    <g transform="translate(30, 60)">
+      <rect width="360" height="85" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="18" y="26" font-size="14" font-weight="700" fill="#1e40af">1. Planner Agent</text>
+      <text x="342" y="25" text-anchor="end" font-size="10" font-weight="600" fill="#2563eb">planner.py</text>
+      <text x="18" y="46" font-size="11" fill="#475569">• Formulates step-by-step strategy &amp; affected file list</text>
+      <text x="18" y="62" font-size="11" fill="#475569">• Establishes Dual-Contract (Logic vs Operational)</text>
+      <text x="18" y="78" font-size="11" font-weight="600" fill="#0369a1">• Auto-bootstraps test_*.py if repository has no tests</text>
+    </g>
+
+    <!-- Flow Arrow: Planner -> Coder -->
+    <line x1="210" y1="145" x2="210" y2="175" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <text x="218" y="164" font-size="10" font-weight="600" fill="#2563eb">plan + files</text>
+
+    <!-- NODE 2: Coder Agent -->
+    <g transform="translate(30, 175)">
+      <rect width="360" height="98" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="18" y="24" font-size="14" font-weight="700" fill="#1e40af">2. Coder Agent</text>
+      <text x="342" y="23" text-anchor="end" font-size="10" font-weight="600" fill="#2563eb">coder.py</text>
+      <text x="18" y="44" font-size="11" fill="#475569">• Mode A: Surgical Block Patching (whitespace-tolerant)</text>
+      <text x="18" y="60" font-size="11" fill="#475569">• Mode B: Topological Scaffolding (models ➔ UI ➔ tests)</text>
+      <text x="18" y="76" font-size="11" fill="#475569">• Preserves existing codebases via surgical in-place edits</text>
+      <text x="18" y="92" font-size="11" font-weight="600" fill="#b91c1c">• Repeat-Edit Circuit Breaker (halts stagnant loops)</text>
+    </g>
+
+    <!-- Flow Arrow: Coder -> Sandbox Test Runner -->
+    <line x1="210" y1="273" x2="210" y2="305" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <text x="218" y="293" font-size="10" font-weight="600" fill="#2563eb">proposed edits</text>
+
+    <!-- NODE 3: Test Runner & Smoke Tester Node -->
+    <g transform="translate(30, 305)">
+      <rect width="360" height="90" rx="10" fill="#ffffff" stroke="#0d9488" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="18" y="24" font-size="14" font-weight="700" fill="#0f766e">3. Sandbox Test Execution Node</text>
+      <text x="342" y="23" text-anchor="end" font-size="10" font-weight="600" fill="#0d9488">run_tests_node</text>
+      <text x="18" y="44" font-size="11" fill="#475569">• Dispatches proposed edits to isolated temporary sandbox</text>
+      <text x="18" y="60" font-size="11" fill="#475569">• Runs pytest with comprehensive multi-fail reporting</text>
+      <text x="18" y="76" font-size="11" font-weight="600" fill="#0f766e">• Runs Headless Streamlit AppTest &amp; Module Import checks</text>
+    </g>
+
+    <!-- Flow Arrow: Test Runner -> Reviewer -->
+    <line x1="210" y1="395" x2="210" y2="425" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow-blue)" />
+    <text x="218" y="414" font-size="10" font-weight="600" fill="#2563eb">tests_passed + test_output</text>
+
+    <!-- NODE 4: Reviewer Agent -->
+    <g transform="translate(30, 425)">
+      <rect width="360" height="115" rx="10" fill="#ffffff" stroke="#3b82f6" stroke-width="1.8" filter="url(#card-shadow)" />
+      <text x="18" y="24" font-size="14" font-weight="700" fill="#1e40af">4. Reviewer Agent</text>
+      <text x="342" y="23" text-anchor="end" font-size="10" font-weight="600" fill="#2563eb">reviewer.py</text>
+      <text x="18" y="44" font-size="11" font-weight="600" fill="#1e293b">DUAL-GATE REVIEW PROTOCOL:</text>
+      <text x="18" y="60" font-size="11" fill="#475569">• Gate 1 (Automated): Diagnoses exact test &amp; smoke crashes</text>
+      <text x="18" y="76" font-size="11" fill="#475569">• Gate 2 (Usability): Audits UI/UX, rejects hollow stubs &amp;</text>
+      <text x="28" y="90" font-size="11" fill="#475569">clunky single-frame menus; verifies operational contract</text>
+      <text x="18" y="106" font-size="11" font-weight="600" fill="#047857">• Generates clear plain-English instructions for humans</text>
+    </g>
+
+    <!-- Internal Conditional Feedback Loop (Reviewer -> Coder) -->
+    <path d="M 390 480 Q 425 480 425 350 T 425 220 Q 425 220 390 220" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arrow-red)" />
+    <rect x="365" y="338" width="105" height="22" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1" />
+    <text x="417" y="353" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">Retry (iter &lt; 3)</text>
+  </g>
+
+  <!-- ========================================================================= -->
+  <!-- 3. ISOLATED TEST SANDBOX (Bottom Left) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(50, 400)">
+    <rect width="320" height="155" rx="12" fill="#fff7ed" stroke="#ea580c" stroke-width="2" filter="url(#card-shadow)" />
+    <!-- Header -->
+    <rect width="320" height="34" rx="12" fill="#ffedd5" />
+    <rect y="22" width="320" height="12" fill="#ffedd5" />
+    <circle cx="20" cy="17" r="5" fill="#ea580c" />
+    <text x="34" y="22" font-size="14" font-weight="700" fill="#9a3412">Isolated Sandbox Environment</text>
+    
+    <!-- Body Content -->
+    <text x="20" y="56" font-size="11" fill="#431407">• Non-destructive tempdir copy (repo clone per run)</text>
+    <text x="20" y="74" font-size="11" fill="#431407">• Environment scrubbing: _KEEP_ENV strips API keys</text>
+    <text x="20" y="92" font-size="11" fill="#431407">• safe_path() path-traversal rejection guards</text>
+    <text x="20" y="110" font-size="11" font-weight="600" fill="#c2410c">• Automated Verification Engines:</text>
+    <text x="28" y="126" font-size="10.5" fill="#431407">1. pytest -q --maxfail=10 (backend logic units)</text>
+    <text x="28" y="142" font-size="10.5" fill="#431407">2. Streamlit AppTest (headless UI entrypoint checks)</text>
+  </g>
+
+  <!-- Connection: Test Runner Node <==> Sandbox -->
+  <path d="M 460 445 L 370 445" fill="none" stroke="#ea580c" stroke-width="2.2" marker-end="url(#arrow-amber)" />
+  <text x="415" y="435" text-anchor="middle" font-size="10" font-weight="700" fill="#c2410c">Executes In</text>
+
+  <path d="M 370 475 L 460 475" fill="none" stroke="#0d9488" stroke-width="2.2" marker-end="url(#arrow-blue)" />
+  <text x="415" y="492" text-anchor="middle" font-size="10" font-weight="700" fill="#0f766e">Test Output</text>
+
+  <!-- ========================================================================= -->
+  <!-- 4. LITELLM GATEWAY & LLM PROVIDERS (Right Side) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(900, 200)">
+    <rect width="250" height="195" rx="12" fill="#fefce8" stroke="#ca8a04" stroke-width="2" filter="url(#card-shadow)" />
+    <!-- Header -->
+    <rect width="250" height="34" rx="12" fill="#fef9c3" />
+    <rect y="22" width="250" height="12" fill="#fef9c3" />
+    <circle cx="18" cy="17" r="5" fill="#ca8a04" />
+    <text x="30" y="22" font-size="13" font-weight="700" fill="#713f12">LiteLLM Gateway (app/llm.py)</text>
+
+    <!-- Body Content -->
+    <text x="16" y="56" font-size="11" font-weight="600" fill="#854d0e">• Native API JSON Mode</text>
+    <text x="16" y="74" font-size="11" fill="#475569">• Pydantic Validation Schemas</text>
+    <text x="16" y="92" font-size="11" fill="#475569">• 4-Tier Regex Salvage Parsing</text>
+    <text x="16" y="110" font-size="11" font-weight="600" fill="#a16207">• Reflective Self-Correction:</text>
+    <text x="24" y="126" font-size="10" fill="#475569">(Auto-heals bad JSON on attempt 2)</text>
+    <text x="16" y="146" font-size="11" font-weight="600" fill="#b45309">• Dynamic Model Cascade:</text>
+    <text x="24" y="162" font-size="10" fill="#475569">Routes 429/503 to active fallbacks</text>
+    <text x="16" y="182" font-size="11" fill="#475569">• Cumulative Token/Cost Tracking</text>
+  </g>
+
+  <!-- LLM Providers Box -->
+  <g transform="translate(900, 440)">
+    <rect width="250" height="110" rx="12" fill="#faf5ff" stroke="#9333ea" stroke-width="2" filter="url(#card-shadow)" />
+    <rect width="250" height="30" rx="12" fill="#f3e8ff" />
+    <rect y="20" width="250" height="10" fill="#f3e8ff" />
+    <circle cx="18" cy="15" r="5" fill="#9333ea" />
+    <text x="30" y="20" font-size="13" font-weight="700" fill="#581c87">LLM Provider Endpoints</text>
+
+    <text x="16" y="52" font-size="11" font-weight="600" fill="#6b21a8">• Primary: Google Gemini 3.5 / 3.7</text>
+    <text x="16" y="70" font-size="11" fill="#475569">• Fallback: Gemini 3.5 Flash Lite</text>
+    <text x="16" y="88" font-size="11" fill="#475569">• Compatible: OpenAI GPT-4o / Claude / Local</text>
+  </g>
+
+  <!-- Gateway -> Providers arrow -->
+  <line x1="1025" y1="395" x2="1025" y2="440" stroke="#9333ea" stroke-width="2" marker-end="url(#arrow-blue)" />
+
+  <!-- Agents -> LiteLLM Gateway Connections -->
+  <path d="M 820 190 Q 860 190 900 240" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-amber)" />
+  <path d="M 820 310 Q 860 310 900 280" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-amber)" />
+  <path d="M 820 540 Q 860 540 900 350" fill="none" stroke="#d97706" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-amber)" />
+  <text x="860" y="230" font-size="10" font-weight="600" fill="#b45309">ask_json()</text>
+
+  <!-- ========================================================================= -->
+  <!-- 5. USER INTERFACE & DISK COMMIT ENGINE (Bottom Center) -->
+  <!-- ========================================================================= -->
+  <g transform="translate(430, 720)">
+    <rect width="420" height="95" rx="12" fill="#ffffff" stroke="#334155" stroke-width="2.2" filter="url(#card-shadow)" />
+    <rect width="420" height="30" rx="12" fill="#f1f5f9" />
+    <rect y="18" width="420" height="12" fill="#f1f5f9" />
+    <text x="210" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">User Interface &amp; Delivery Layer</text>
+
+    <text x="20" y="50" font-size="11" font-weight="600" fill="#1e293b">• Streamlit Interactive Dashboard (app/ui/streamlit_app.py)</text>
+    <text x="20" y="68" font-size="11" fill="#475569">• Command-Line Interface (app/main.py)</text>
+    <text x="20" y="84" font-size="11" font-weight="600" fill="#059669">➔ Pure Unified Diffs via difflib | Safe Commit via --apply</text>
+  </g>
+
+  <!-- Flow: User -> Planner (Input Task) -->
+  <path d="M 430 760 Q 370 760 370 450 T 370 200 Q 370 200 460 200" fill="none" stroke="#0f172a" stroke-width="2.2" marker-end="url(#arrow-blue)" />
+  <rect x="305" y="280" width="130" height="24" rx="4" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" />
+  <text x="370" y="296" text-anchor="middle" font-size="10" font-weight="700" fill="#0f172a">User Task Input</text>
+
+  <!-- Flow: Reviewer -> User (Approved Result) -->
+  <line x1="640" y1="675" x2="640" y2="720" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow-green)" />
+  <rect x="580" y="688" width="120" height="20" rx="4" fill="#dcfce7" stroke="#86efac" stroke-width="1" />
+  <text x="640" y="702" text-anchor="middle" font-size="10" font-weight="700" fill="#15803d">Approved (Gate 1 &amp; 2)</text>
+
+  <!-- Flow: RAG to State Machine -->
+  <path d="M 370 160 Q 400 160 460 160" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-green)" />
+  <text x="400" y="150" font-size="9" font-weight="700" fill="#166534">Top Symbols</text>
+
+  <path d="M 370 185 Q 400 185 460 270" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#arrow-green)" />
+  <text x="390" y="240" font-size="9" font-weight="700" fill="#166534">AST Chunks</text>
+</svg>

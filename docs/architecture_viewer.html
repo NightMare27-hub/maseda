@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASEDA - High-Level Architecture Diagram</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    p {
+      margin: 4px 0 0 0;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+    button, a.btn {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s ease;
+    }
+    button:hover, a.btn:hover {
+      background: #1d4ed8;
+    }
+    button.secondary, a.btn.secondary {
+      background: #334155;
+    }
+    button.secondary:hover, a.btn.secondary:hover {
+      background: #475569;
+    }
+    .canvas-container {
+      max-width: 1200px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    img, svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>MASEDA: High-Level Architecture Diagram</h1>
+      <p>Publication-Grade Vector Diagram for Dissertation, Slides & Reports</p>
+    </div>
+    <div class="btn-group">
+      <a href="maseda_high_level_architecture.svg" download="maseda_high_level_architecture.svg" class="btn secondary">
+        📥 Download SVG
+      </a>
+      <button id="download-png-btn" class="btn">
+        📷 Download PNG (High-Res)
+      </button>
+    </div>
+  </div>
+
+  <div class="canvas-container" id="svg-container">
+    <object id="svg-object" type="image/svg+xml" data="maseda_high_level_architecture.svg" style="width: 100%; height: auto;">
+      Your browser does not support SVG.
+    </object>
+  </div>
+
+  <script>
+    document.getElementById("download-png-btn").addEventListener("click", function() {
+      fetch("maseda_high_level_architecture.svg")
+        .then(res => res.text())
+        .then(svgText => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(svgText, "image/svg+xml");
+          const svgElement = doc.documentElement;
+          
+          const svgBlob = new Blob([svgText], {type: "image/svg+xml;charset=utf-8"});
+          const URL = window.URL || window.webkitURL || window;
+          const blobURL = URL.createObjectURL(svgBlob);
+          
+          const image = new Image();
+          image.onload = function() {
+            const canvas = document.createElement("canvas");
+            // 2x upscale for crisp 300 DPI print quality
+            const scale = 2;
+            canvas.width = 1200 * scale;
+            canvas.height = 850 * scale;
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#f8fafc";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(scale, scale);
+            ctx.drawImage(image, 0, 0);
+            
+            const pngURL = canvas.toDataURL("image/png");
+            const downloadLink = document.createElement("a");
+            downloadLink.href = pngURL;
+            downloadLink.download = "maseda_high_level_architecture.png";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(blobURL);
+          };
+          image.src = blobURL;
+        });
+    });
+  </script>
+</body>
+</html>
