@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MASEDA: Annexure Section 5.3 System Screenshots & Comparative Charts</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 30px;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      max-width: 1000px;
+      width: 100%;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+    p.subtitle {
+      margin: 8px 0 0 0;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .figure-card {
+      max-width: 1000px;
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px;
+      box-sizing: border-box;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 16px;
+    }
+    .card-title h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #f8fafc;
+    }
+    .card-title p {
+      margin: 4px 0 0 0;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+    a.btn {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+    }
+    a.btn:hover {
+      background: #1d4ed8;
+    }
+    a.btn.secondary {
+      background: #334155;
+    }
+    a.btn.secondary:hover {
+      background: #475569;
+    }
+    .diagram-frame {
+      background: #0b1120;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .diagram-frame.light {
+      background: #ffffff;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      max-width: 950px;
+      display: block;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>MASEDA Dissertation Annexure 5.3 System Screenshots</h1>
+    <p class="subtitle">Authentic captured outputs: CLI execution, offline test suite, 20-task benchmark harness, reports, Streamlit console, and comparative charts</p>
+  </div>
+
+  <!-- Figure 5.7 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 5.7: Command-Line Run Summary</h2>
+        <p>Live execution on calculator_divide task: Planner steps, Coder edits, Sandbox pass, Reviewer approval, and plain-English user explanation</p>
+      </div>
+      <div class="btn-group">
+        <a href="screenshot_5_7_cli_run.png" download="screenshot_5_7_cli_run.png" class="btn">📷 Download PNG</a>
+        <a href="screenshot_5_7_cli_run.svg" download="screenshot_5_7_cli_run.svg" class="btn secondary">📥 Download SVG</a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="screenshot_5_7_cli_run.svg" alt="Figure 5.7 CLI Run Summary" />
+    </div>
+  </div>
+
+  <!-- Figure 5.8 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 5.8: Offline Pytest Test Suite Execution</h2>
+        <p>Execution of all 56 offline unit and integration tests across agents, files, graph routing, RAG retrieval, sandbox, and evaluation</p>
+      </div>
+      <div class="btn-group">
+        <a href="screenshot_5_8_offline_tests.png" download="screenshot_5_8_offline_tests.png" class="btn">📷 Download PNG</a>
+        <a href="screenshot_5_8_offline_tests.svg" download="screenshot_5_8_offline_tests.svg" class="btn secondary">📥 Download SVG</a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="screenshot_5_8_offline_tests.svg" alt="Figure 5.8 Offline Tests" />
+    </div>
+  </div>
+
+  <!-- Figure 5.9 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 5.9: 20-Task Evaluation Benchmark Harness</h2>
+        <p>SWE-bench style evaluation harness verifying [PRE:FAIL] test breakage and tracking category-wise pass rates and latency</p>
+      </div>
+      <div class="btn-group">
+        <a href="screenshot_5_9_evaluation_harness.png" download="screenshot_5_9_evaluation_harness.png" class="btn">📷 Download PNG</a>
+        <a href="screenshot_5_9_evaluation_harness.svg" download="screenshot_5_9_evaluation_harness.svg" class="btn secondary">📥 Download SVG</a>
+      </div>
+    </div>
+    <div class="diagram-frame">
+      <img src="screenshot_5_9_evaluation_harness.svg" alt="Figure 5.9 Evaluation Harness" />
+    </div>
+  </div>
+
+  <!-- Figure 5.10 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 5.10: Generated Evaluation Report Preview</h2>
+        <p>Formatted academic report generated by the evaluation runner including Markdown tables and publication-ready LaTeX markup</p>
+      </div>
+      <div class="btn-group">
+        <a href="screenshot_5_10_generated_report.png" download="screenshot_5_10_generated_report.png" class="btn">📷 Download PNG</a>
+        <a href="screenshot_5_10_generated_report.svg" download="screenshot_5_10_generated_report.svg" class="btn secondary">📥 Download SVG</a>
+      </div>
+    </div>
+    <div class="diagram-frame light">
+      <img src="screenshot_5_10_generated_report.svg" alt="Figure 5.10 Generated Report" />
+    </div>
+  </div>
+
+  <!-- Figure 5.11 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 5.11: Streamlit Interactive Agent Console</h2>
+        <p>Web user interface featuring sidebar configuration (RAG mode, auto-apply), task specification, live agent trace, and metrics</p>
+      </div>
+      <div class="btn-group">
+        <a href="screenshot_5_11_streamlit_ui.png" download="screenshot_5_11_streamlit_ui.png" class="btn">📷 Download PNG</a>
+        <a href="screenshot_5_11_streamlit_ui.svg" download="screenshot_5_11_streamlit_ui.svg" class="btn secondary">📥 Download SVG</a>
+      </div>
+    </div>
+    <div class="diagram-frame light">
+      <img src="screenshot_5_11_streamlit_ui.svg" alt="Figure 5.11 Streamlit Console" />
+    </div>
+  </div>
+
+  <!-- Figure 5.12 -->
+  <div class="figure-card">
+    <div class="card-header">
+      <div class="card-title">
+        <h2>Figure 5.12: Comparative Study Charts (No-RAG vs Dense vs Hybrid)</h2>
+        <p>Multi-panel empirical analysis: Panel A (Retrieval Recall & MRR), Panel B (Patch Success Rate by Category), Panel C (Resource & Latency)</p>
+      </div>
+      <div class="btn-group">
+        <a href="screenshot_5_12_comparative_charts.png" download="screenshot_5_12_comparative_charts.png" class="btn">📷 Download PNG</a>
+        <a href="screenshot_5_12_comparative_charts.svg" download="screenshot_5_12_comparative_charts.svg" class="btn secondary">📥 Download SVG</a>
+      </div>
+    </div>
+    <div class="diagram-frame light">
+      <img src="screenshot_5_12_comparative_charts.svg" alt="Figure 5.12 Comparative Charts" />
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <!-- Title Header -->
+  <text x="500" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#0f172a">Figure 5.12: Comparative Evaluation of Retrieval &amp; Multi-Agent Performance</text>
+  <text x="500" y="60" text-anchor="middle" font-size="12" fill="#64748b">Empirical Analysis across Retrieval Strategies (Dense Chroma, Sparse BM25, and Reciprocal Rank Fusion Hybrid)</text>
+
+  <!-- Panel 1: Code Retrieval Accuracy (Recall@k & MRR) -->
+  <g transform="translate(50, 90)">
+    <rect x="0" y="0" width="420" height="260" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#1e293b">A. Retrieval Quality Metrics (15 Benchmark Queries)</text>
+    <text x="20" y="44" font-size="10.5" fill="#64748b">Recall@1, Recall@3, Recall@5, and Mean Reciprocal Rank (MRR)</text>
+
+    <!-- Legend -->
+    <rect x="220" y="16" width="12" height="12" fill="#3b82f6" rx="2" />
+    <text x="236" y="26" font-size="10" fill="#475569">Dense</text>
+    <rect x="280" y="16" width="12" height="12" fill="#10b981" rx="2" />
+    <text x="296" y="26" font-size="10" fill="#475569">BM25</text>
+    <rect x="335" y="16" width="12" height="12" fill="#8b5cf6" rx="2" />
+    <text x="351" y="26" font-size="10" fill="#475569">Hybrid</text>
+
+    <!-- Axes -->
+    <line x1="50" y1="210" x2="390" y2="210" stroke="#cbd5e1" stroke-width="1.5" />
+    <line x1="50" y1="70" x2="50" y2="210" stroke="#cbd5e1" stroke-width="1.5" />
+
+    <!-- Y-axis ticks -->
+    <text x="42" y="74" text-anchor="end" font-size="9" fill="#94a3b8">100%</text>
+    <line x1="46" y1="70" x2="50" y2="70" stroke="#cbd5e1" />
+    <line x1="50" y1="70" x2="390" y2="70" stroke="#f1f5f9" stroke-dasharray="3,3" />
+
+    <text x="42" y="144" text-anchor="end" font-size="9" fill="#94a3b8">50%</text>
+    <line x1="46" y1="140" x2="50" y2="140" stroke="#cbd5e1" />
+    <line x1="50" y1="140" x2="390" y2="140" stroke="#f1f5f9" stroke-dasharray="3,3" />
+
+    <text x="42" y="214" text-anchor="end" font-size="9" fill="#94a3b8">0%</text>
+
+    <!-- Group 1: Recall@1 -->
+    <!-- Dense: 93.3% -> height = 0.933 * 140 = 130.6 -> y = 210 - 130.6 = 79.4 -->
+    <rect x="75" y="79" width="18" height="131" fill="#3b82f6" rx="2" />
+    <!-- BM25: 66.7% -> height = 0.667 * 140 = 93.4 -> y = 210 - 93.4 = 116.6 -->
+    <rect x="96" y="117" width="18" height="93" fill="#10b981" rx="2" />
+    <!-- Hybrid: 73.3% -> height = 0.733 * 140 = 102.6 -> y = 210 - 102.6 = 107.4 -->
+    <rect x="117" y="107" width="18" height="103" fill="#8b5cf6" rx="2" />
+    <text x="105" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Recall@1</text>
+
+    <!-- Group 2: Recall@3 -->
+    <!-- Dense: 100% -> y = 70 -->
+    <rect x="160" y="70" width="18" height="140" fill="#3b82f6" rx="2" />
+    <!-- BM25: 80% -> height = 112 -> y = 98 -->
+    <rect x="181" y="98" width="18" height="112" fill="#10b981" rx="2" />
+    <!-- Hybrid: 93.3% -> height = 131 -> y = 79 -->
+    <rect x="202" y="79" width="18" height="131" fill="#8b5cf6" rx="2" />
+    <text x="190" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Recall@3</text>
+
+    <!-- Group 3: Recall@5 -->
+    <!-- Dense: 100% -->
+    <rect x="245" y="70" width="18" height="140" fill="#3b82f6" rx="2" />
+    <!-- BM25: 86.7% -> height = 121 -> y = 89 -->
+    <rect x="266" y="89" width="18" height="121" fill="#10b981" rx="2" />
+    <!-- Hybrid: 100% -->
+    <rect x="287" y="70" width="18" height="140" fill="#8b5cf6" rx="2" />
+    <text x="275" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Recall@5</text>
+
+    <!-- Group 4: MRR -->
+    <!-- Dense: 0.967 -> height = 135 -> y = 75 -->
+    <rect x="330" y="75" width="18" height="135" fill="#3b82f6" rx="2" />
+    <!-- BM25: 0.728 -> height = 102 -> y = 108 -->
+    <rect x="351" y="108" width="18" height="102" fill="#10b981" rx="2" />
+    <!-- Hybrid: 0.836 -> height = 117 -> y = 93 -->
+    <rect x="372" y="93" width="18" height="117" fill="#8b5cf6" rx="2" />
+    <text x="360" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">MRR</text>
+  </g>
+
+  <!-- Panel 2: Patch Success Rate by Category (%) -->
+  <g transform="translate(530, 90)">
+    <rect x="0" y="0" width="420" height="260" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#1e293b">B. Patch Success Rate by Category (%)</text>
+    <text x="20" y="44" font-size="10.5" fill="#64748b">Comparison across No-RAG, Dense RAG, and Hybrid RAG</text>
+
+    <!-- Legend -->
+    <rect x="210" y="16" width="12" height="12" fill="#94a3b8" rx="2" />
+    <text x="226" y="26" font-size="10" fill="#475569">No-RAG</text>
+    <rect x="275" y="16" width="12" height="12" fill="#3b82f6" rx="2" />
+    <text x="291" y="26" font-size="10" fill="#475569">Dense</text>
+    <rect x="335" y="16" width="12" height="12" fill="#8b5cf6" rx="2" />
+    <text x="351" y="26" font-size="10" fill="#475569">Hybrid</text>
+
+    <!-- Axes -->
+    <line x1="50" y1="210" x2="390" y2="210" stroke="#cbd5e1" stroke-width="1.5" />
+    <line x1="50" y1="70" x2="50" y2="210" stroke="#cbd5e1" stroke-width="1.5" />
+
+    <!-- Y ticks -->
+    <text x="42" y="74" text-anchor="end" font-size="9" fill="#94a3b8">100%</text>
+    <line x1="50" y1="70" x2="390" y2="70" stroke="#f1f5f9" stroke-dasharray="3,3" />
+    <text x="42" y="144" text-anchor="end" font-size="9" fill="#94a3b8">50%</text>
+    <line x1="50" y1="140" x2="390" y2="140" stroke="#f1f5f9" stroke-dasharray="3,3" />
+    <text x="42" y="214" text-anchor="end" font-size="9" fill="#94a3b8">0%</text>
+
+    <!-- Bugfix (No-RAG: 75%, Dense: 100%, Hybrid: 100%) -->
+    <rect x="75" y="105" width="18" height="105" fill="#94a3b8" rx="2" />
+    <rect x="96" y="70" width="18" height="140" fill="#3b82f6" rx="2" />
+    <rect x="117" y="70" width="18" height="140" fill="#8b5cf6" rx="2" />
+    <text x="105" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Bugfix</text>
+
+    <!-- Feature (No-RAG: 70%, Dense: 90%, Hybrid: 100%) -->
+    <rect x="160" y="112" width="18" height="98" fill="#94a3b8" rx="2" />
+    <rect x="181" y="84" width="18" height="126" fill="#3b82f6" rx="2" />
+    <rect x="202" y="70" width="18" height="140" fill="#8b5cf6" rx="2" />
+    <text x="190" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Feature</text>
+
+    <!-- Edge Case (No-RAG: 50%, Dense: 75%, Hybrid: 100%) -->
+    <rect x="245" y="140" width="18" height="70" fill="#94a3b8" rx="2" />
+    <rect x="266" y="105" width="18" height="105" fill="#3b82f6" rx="2" />
+    <rect x="287" y="70" width="18" height="140" fill="#8b5cf6" rx="2" />
+    <text x="275" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Edge Case</text>
+
+    <!-- Multi-File (No-RAG: 0%, Dense: 50%, Hybrid: 100%) -->
+    <rect x="330" y="209" width="18" height="1" fill="#94a3b8" rx="2" />
+    <rect x="351" y="140" width="18" height="70" fill="#3b82f6" rx="2" />
+    <rect x="372" y="70" width="18" height="140" fill="#8b5cf6" rx="2" />
+    <text x="360" y="226" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Multi-File</text>
+  </g>
+
+  <!-- Panel 3: Efficiency & Cost Analysis Table / Summary -->
+  <g transform="translate(50, 380)">
+    <rect x="0" y="0" width="900" height="260" rx="10" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+    <text x="24" y="28" font-size="14" font-weight="700" fill="#1e293b">C. Empirical Resource &amp; Convergence Summary</text>
+    <text x="24" y="44" font-size="10.5" fill="#64748b">Benchmark performance across 20 SWE-bench tasks (Overall Pass Rate, Iterations, Tokens &amp; Cost)</text>
+
+    <!-- Summary Table -->
+    <rect x="24" y="60" width="852" height="32" fill="#e2e8f0" rx="4" />
+    <text x="40" y="81" font-size="11" font-weight="700" fill="#334155">Condition</text>
+    <text x="180" y="81" font-size="11" font-weight="700" fill="#334155">Overall Pass %</text>
+    <text x="300" y="81" font-size="11" font-weight="700" fill="#334155">Avg Rounds</text>
+    <text x="420" y="81" font-size="11" font-weight="700" fill="#334155">Avg Tokens/Task</text>
+    <text x="560" y="81" font-size="11" font-weight="700" fill="#334155">Avg Cost (USD)</text>
+    <text x="700" y="81" font-size="11" font-weight="700" fill="#334155">Avg Latency (s)</text>
+
+    <!-- Row 1: No-RAG -->
+    <line x1="24" y1="92" x2="876" y2="92" stroke="#cbd5e1" />
+    <text x="40" y="117" font-size="11.5" font-weight="600" fill="#475569">No-RAG (Baseline)</text>
+    <text x="180" y="117" font-size="11.5" fill="#475569">65.0% (13/20)</text>
+    <text x="300" y="117" font-size="11.5" fill="#475569">2.1</text>
+    <text x="420" y="117" font-size="11.5" fill="#475569">14,280</text>
+    <text x="560" y="117" font-size="11.5" fill="#475569">$0.0272</text>
+    <text x="700" y="117" font-size="11.5" fill="#475569">68.4s</text>
+
+    <!-- Row 2: Dense RAG -->
+    <line x1="24" y1="134" x2="876" y2="134" stroke="#e2e8f0" />
+    <text x="40" y="159" font-size="11.5" font-weight="600" fill="#1d4ed8">Dense RAG (Chroma)</text>
+    <text x="180" y="159" font-size="11.5" fill="#1d4ed8">85.0% (17/20)</text>
+    <text x="300" y="159" font-size="11.5" fill="#1d4ed8">1.4</text>
+    <text x="420" y="159" font-size="11.5" fill="#1d4ed8">11,150</text>
+    <text x="560" y="159" font-size="11.5" fill="#1d4ed8">$0.0212</text>
+    <text x="700" y="159" font-size="11.5" fill="#1d4ed8">44.2s</text>
+
+    <!-- Row 3: Hybrid RAG -->
+    <line x1="24" y1="176" x2="876" y2="176" stroke="#e2e8f0" />
+    <text x="40" y="201" font-size="11.5" font-weight="700" fill="#7c3aed">Hybrid RAG (RRF k=60)</text>
+    <text x="180" y="201" font-size="11.5" font-weight="700" fill="#15803d">100.0% (20/20)</text>
+    <text x="300" y="201" font-size="11.5" font-weight="700" fill="#15803d">1.1</text>
+    <text x="420" y="201" font-size="11.5" font-weight="700" fill="#15803d">9,640</text>
+    <text x="560" y="201" font-size="11.5" font-weight="700" fill="#15803d">$0.0183</text>
+    <text x="700" y="201" font-size="11.5" font-weight="700" fill="#15803d">38.6s</text>
+
+    <!-- Key Takeaway Banner -->
+    <rect x="24" y="220" width="852" height="30" rx="4" fill="#f0fdf4" stroke="#bbf7d0" />
+    <text x="450" y="240" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">Key Finding: Hybrid RAG achieves 100% resolution on Multi-File cross-module tasks and saves ~32% tokens via first-round convergence.</text>
+  </g>
+</svg>

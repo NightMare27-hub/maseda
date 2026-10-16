@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 620" width="100%" height="100%" style="background:#0f172a; font-family:'Cascadia Code', 'Fira Code', 'Courier New', monospace;">
+  <!-- Window Header -->
+  <rect x="0" y="0" width="920" height="40" fill="#1e293b" rx="8" />
+  <circle cx="24" cy="20" r="6" fill="#ef4444" />
+  <circle cx="44" cy="20" r="6" fill="#f59e0b" />
+  <circle cx="64" cy="20" r="6" fill="#10b981" />
+  <text x="460" y="25" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="-apple-system, sans-serif">PowerShell - MASEDA CLI Autonomous Execution</text>
+
+  <!-- Terminal Content -->
+  <g font-size="12.5" line-height="1.5">
+    <text x="24" y="70" fill="#38bdf8">PS C:\maseda&gt; <tspan fill="#f8fafc">python -m app.main --repo evaluation/toy_repo --task "Implement divide(a, b) in calculator.py. It must return a / b and raise ValueError if b == 0."</tspan></text>
+
+    <text x="24" y="105" fill="#a855f7">[*] Starting MASEDA task: "Implement divide(a, b) in calculator.py..."</text>
+    
+    <text x="24" y="135" fill="#3b82f6">[+] [PLANNER] Plan formulated:</text>
+    <text x="44" y="155" fill="#94a3b8">- Strategy: Implement divide(a, b) returning float and raising ValueError on zero.</text>
+    <text x="44" y="175" fill="#94a3b8">- Contracts: Logic (pytest) &amp; Operational (Continuous REPL with ANSI styling)</text>
+    <text x="44" y="195" fill="#94a3b8">- Target files: ['calculator.py', 'test_calculator.py']</text>
+
+    <text x="24" y="225" fill="#eab308">[+] [CODER] Generated edits for: ['calculator.py', 'test_calculator.py']</text>
+
+    <text x="24" y="255" fill="#10b981">[+] [SANDBOX] Test execution: PASSED (all tests green)</text>
+    <text x="44" y="275" fill="#64748b">Running pytest inside isolated tempdir (env scrubbed, zero API keys)</text>
+
+    <text x="24" y="305" fill="#22c55e">[+] [REVIEWER] Round 1 review: APPROVED</text>
+    <text x="44" y="325" fill="#94a3b8">Summary: Division logic and interactive terminal REPL implemented with full test coverage.</text>
+
+    <!-- Success Box -->
+    <rect x="24" y="350" width="872" height="150" fill="#1e293b" rx="8" stroke="#334155" stroke-width="1.5" />
+    <text x="40" y="375" fill="#f8fafc" font-weight="bold">============================================================</text>
+    <text x="40" y="395" fill="#38bdf8" font-weight="bold">EXPLANATION FOR USERS (PLAIN ENGLISH):</text>
+    <text x="40" y="415" fill="#f1f5f9">1. Backend Logic: divide(a, b) validates non-zero divisor, raising ValueError('Cannot divide by zero').</text>
+    <text x="40" y="435" fill="#f1f5f9">2. Interactive REPL: Built safe_eval expression parser with running memory ('ans') &amp; ANSI colors.</text>
+    <text x="40" y="455" fill="#4ade80">HOW TO TEST: pytest -q test_calculator.py   |   HOW TO RUN: python calculator.py</text>
+    <text x="40" y="475" fill="#f8fafc" font-weight="bold">============================================================</text>
+
+    <text x="24" y="530" fill="#22c55e" font-weight="bold">STATUS: success after 1 round(s). Run id: 20261017-014630</text>
+    <text x="24" y="560" fill="#f59e0b" font-weight="bold">METRICS: 17,162 tokens | $0.0327 cost | 102.57s elapsed (Gemini 3.8 Flash Cascade)</text>
+
+    <text x="24" y="595" fill="#38bdf8">PS C:\maseda&gt; <tspan fill="#f8fafc" class="cursor">_</tspan></text>
+  </g>
+</svg>

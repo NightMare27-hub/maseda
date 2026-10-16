@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 680" width="100%" height="100%" style="background:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <!-- Browser Chrome -->
+  <rect x="0" y="0" width="1000" height="44" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+  <circle cx="24" cy="22" r="6" fill="#ef4444" />
+  <circle cx="44" cy="22" r="6" fill="#f59e0b" />
+  <circle cx="64" cy="22" r="6" fill="#10b981" />
+  <rect x="180" y="8" width="640" height="28" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1" />
+  <text x="500" y="26" text-anchor="middle" font-size="12" fill="#64748b">http://localhost:8501 - MASEDA | Multi-Agent Coding Assistant</text>
+
+  <!-- Layout: Sidebar + Main Content -->
+  <!-- Sidebar -->
+  <rect x="0" y="44" width="280" height="636" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1" />
+  <g transform="translate(24, 70)">
+    <text x="0" y="20" font-size="16" font-weight="700" fill="#0f172a">⚙️ Configuration</text>
+
+    <text x="0" y="60" font-size="11" font-weight="600" fill="#475569">Target Repository Path</text>
+    <rect x="0" y="70" width="232" height="32" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+    <text x="10" y="91" font-size="11" fill="#1e293b">demos/portfolio_simulator</text>
+
+    <text x="0" y="130" font-size="13" font-weight="700" fill="#0f172a">RAG Options</text>
+    <!-- Checkbox checked -->
+    <rect x="0" y="145" width="16" height="16" rx="3" fill="#2563eb" />
+    <polyline points="3,153 7,157 13,149" fill="none" stroke="#ffffff" stroke-width="2" />
+    <text x="24" y="158" font-size="11" fill="#1e293b">Enable AST Codebase RAG</text>
+
+    <text x="0" y="195" font-size="11" font-weight="600" fill="#475569">Retrieval Strategy</text>
+    <rect x="0" y="205" width="232" height="32" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+    <text x="10" y="226" font-size="11" fill="#1e293b">hybrid (Dense Chroma + BM25 RRF)</text>
+
+    <text x="0" y="265" font-size="13" font-weight="700" fill="#0f172a">Patching</text>
+    <rect x="0" y="280" width="16" height="16" rx="3" fill="#2563eb" />
+    <polyline points="3,288 7,292 13,284" fill="none" stroke="#ffffff" stroke-width="2" />
+    <text x="24" y="293" font-size="11" fill="#1e293b">Auto-Apply Edits to Disk</text>
+
+    <!-- Info banner -->
+    <rect x="0" y="330" width="232" height="70" rx="6" fill="#eff6ff" stroke="#bfdbfe" />
+    <text x="10" y="352" font-size="10.5" font-weight="600" fill="#1e40af">💡 Dual-Gate Verification Active</text>
+    <text x="10" y="370" font-size="9.5" fill="#3b82f6">Pytest units + Headless Streamlit</text>
+    <text x="10" y="384" font-size="9.5" fill="#3b82f6">AppTest smoke tests active.</text>
+  </g>
+
+  <!-- Main Panel -->
+  <g transform="translate(310, 70)">
+    <!-- Title -->
+    <text x="0" y="24" font-size="22" font-weight="800" fill="#0f172a">🤖 MASEDA Software Development Assistant</text>
+    <text x="0" y="44" font-size="12" fill="#64748b">Planner, Coder &amp; Reviewer agents autonomously writing, testing, and reviewing code in a headless sandbox.</text>
+
+    <!-- Task Input Box -->
+    <text x="0" y="80" font-size="13" font-weight="700" fill="#1e293b">📝 Task Specification</text>
+    <rect x="0" y="90" width="650" height="54" rx="6" fill="#ffffff" stroke="#cbd5e1" />
+    <text x="12" y="112" font-size="11" fill="#334155">Fix the AttributeError in app.py where PortfolioMetrics is missing diversification_score.</text>
+    <text x="12" y="130" font-size="11" fill="#334155">Compute it in portfolio_engine.py and display it in app.py.</text>
+
+    <!-- Button -->
+    <rect x="0" y="155" width="140" height="34" rx="6" fill="#2563eb" />
+    <text x="70" y="177" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">🚀 Run MASEDA</text>
+
+    <!-- Execution Timeline (Cards) -->
+    <text x="0" y="220" font-size="14" font-weight="700" fill="#0f172a">⚡ Agent Execution Trace</text>
+
+    <!-- Step 1: Planner -->
+    <rect x="0" y="235" width="650" height="48" rx="6" fill="#f8fafc" stroke="#e2e8f0" />
+    <circle cx="24" cy="259" r="8" fill="#22c55e" />
+    <text x="42" y="263" font-size="11.5" font-weight="700" fill="#1e293b">1. Planner Agent: <tspan font-weight="normal" fill="#475569">Target files: ['portfolio_engine.py', 'app.py']</tspan></text>
+
+    <!-- Step 2: Coder -->
+    <rect x="0" y="290" width="650" height="48" rx="6" fill="#f8fafc" stroke="#e2e8f0" />
+    <circle cx="24" cy="314" r="8" fill="#22c55e" />
+    <text x="42" y="318" font-size="11.5" font-weight="700" fill="#1e293b">2. Coder Agent: <tspan font-weight="normal" fill="#475569">Surgical patches applied to portfolio_engine.py &amp; app.py</tspan></text>
+
+    <!-- Step 3: Sandbox Tests -->
+    <rect x="0" y="345" width="650" height="48" rx="6" fill="#f8fafc" stroke="#e2e8f0" />
+    <circle cx="24" cy="369" r="8" fill="#22c55e" />
+    <text x="42" y="373" font-size="11.5" font-weight="700" fill="#1e293b">3. Sandbox Execution: <tspan font-weight="bold" fill="#16a34a">PASSED (All unit tests &amp; Streamlit AppTest green)</tspan></text>
+
+    <!-- Step 4: Reviewer -->
+    <rect x="0" y="400" width="650" height="48" rx="6" fill="#f0fdf4" stroke="#86efac" />
+    <circle cx="24" cy="424" r="8" fill="#22c55e" />
+    <text x="42" y="428" font-size="11.5" font-weight="700" fill="#166534">4. Reviewer Agent: APPROVED (Dual-Gate verified)</text>
+
+    <!-- Metrics Bar -->
+    <rect x="0" y="465" width="650" height="60" rx="8" fill="#1e293b" />
+    <text x="40" y="492" font-size="10" fill="#94a3b8">STATUS</text>
+    <text x="40" y="512" font-size="13" font-weight="700" fill="#4ade80">SUCCESS (Iter 1)</text>
+
+    <text x="180" y="492" font-size="10" fill="#94a3b8">TOKENS CONSUMED</text>
+    <text x="180" y="512" font-size="13" font-weight="700" fill="#ffffff">8,420</text>
+
+    <text x="340" y="492" font-size="10" fill="#94a3b8">ESTIMATED COST</text>
+    <text x="340" y="512" font-size="13" font-weight="700" fill="#ffffff">$0.0162</text>
+
+    <text x="480" y="492" font-size="10" fill="#94a3b8">LATENCY</text>
+    <text x="480" y="512" font-size="13" font-weight="700" fill="#ffffff">34.80s</text>
+
+    <!-- Unified Diff Collapsible Preview -->
+    <rect x="0" y="540" width="650" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1" />
+    <text x="16" y="565" font-size="11.5" font-weight="600" fill="#334155">🔍 Unified Diff: portfolio_engine.py &amp; app.py (Auto-applied to disk)</text>
+  </g>
+</svg>

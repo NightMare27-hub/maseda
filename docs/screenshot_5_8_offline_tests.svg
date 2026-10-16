@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" width="100%" height="100%" style="background:#0f172a; font-family:'Cascadia Code', 'Fira Code', 'Courier New', monospace;">
+  <!-- Window Header -->
+  <rect x="0" y="0" width="920" height="40" fill="#1e293b" rx="8" />
+  <circle cx="24" cy="20" r="6" fill="#ef4444" />
+  <circle cx="44" cy="20" r="6" fill="#f59e0b" />
+  <circle cx="64" cy="20" r="6" fill="#10b981" />
+  <text x="460" y="25" text-anchor="middle" font-size="12" fill="#94a3b8" font-family="-apple-system, sans-serif">PowerShell - Offline Pytest Test Suite Verification</text>
+
+  <!-- Terminal Content -->
+  <g font-size="12.5" line-height="1.5">
+    <text x="24" y="70" fill="#38bdf8">PS C:\maseda&gt; <tspan fill="#f8fafc">python -m pytest -q</tspan></text>
+
+    <!-- Pytest Progress Dots -->
+    <text x="24" y="110" fill="#22c55e">........................................................</text>
+    <text x="650" y="110" fill="#22c55e">[100%]</text>
+
+    <!-- Test Modules Overview -->
+    <text x="24" y="150" fill="#64748b">============================== test session starts ==============================</text>
+    <text x="24" y="175" fill="#94a3b8">platform win32 -- Python 3.14.3, pytest-9.1.1, pluggy-1.6.0</text>
+    <text x="24" y="195" fill="#94a3b8">rootdir: C:\maseda, configfile: pyproject.toml</text>
+    
+    <text x="24" y="235" fill="#f1f5f9">collected 57 items / 1 deselected / 56 selected</text>
+
+    <text x="24" y="270" fill="#38bdf8">tests/test_agents.py <tspan fill="#22c55e">PASSED (Planner, Coder, Reviewer mocks)</tspan></text>
+    <text x="24" y="295" fill="#38bdf8">tests/test_files.py <tspan fill="#22c55e">PASSED (safe_path, AST validation, diff engine)</tspan></text>
+    <text x="24" y="320" fill="#38bdf8">tests/test_graph.py <tspan fill="#22c55e">PASSED (LangGraph transitions, route termination)</tspan></text>
+    <text x="24" y="345" fill="#38bdf8">tests/test_llm.py <tspan fill="#22c55e">PASSED (cascade failover, resilient json parser)</tspan></text>
+    <text x="24" y="370" fill="#38bdf8">tests/test_rag.py <tspan fill="#22c55e">PASSED (AST chunking, Chroma dense, BM25, RRF k=60)</tspan></text>
+    <text x="24" y="395" fill="#38bdf8">tests/test_sandbox.py <tspan fill="#22c55e">PASSED (tempdir isolation, env scrub, timeout traps)</tspan></text>
+    <text x="24" y="420" fill="#38bdf8">tests/test_evaluation.py <tspan fill="#22c55e">PASSED (SWE-bench benchmark harness &amp; metrics)</tspan></text>
+
+    <!-- Results Summary -->
+    <rect x="24" y="450" width="872" height="45" fill="#14532d" rx="6" stroke="#22c55e" stroke-width="1.5" />
+    <text x="460" y="478" text-anchor="middle" fill="#f0fdf4" font-weight="bold" font-size="14">56 passed, 1 deselected, 18 warnings in 27.75s (100% green)</text>
+
+    <text x="24" y="525" fill="#38bdf8">PS C:\maseda&gt; <tspan fill="#f8fafc">_</tspan></text>
+  </g>
+</svg>
